@@ -8,43 +8,33 @@ const AboutStats: React.FC = () => {
     ];
 
     return (
-        <section className="w-full pb-20 flex justify-center">
+        <section className="w-full pb-[100px] flex justify-center">
             <div className="container mx-auto px-4 text-center">
-                <div className="flex flex-wrap justify-center gap-10 md:gap-24 mb-10">
+                <div className="flex flex-wrap justify-center gap-10 md:gap-24 mb-10 w-full max-w-[732px] mx-auto">
                     {stats.map((stat, index) => (
                         <div key={index} className="flex flex-col items-center">
-                            <span className="font-semibold text-4xl md:text-[56px] text-[#123042] mb-2">
+                            <span className="font-medium text-[48px] leading-none tracking-normal mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
                                 {index === 1 ? (
                                     <>
-                                        <span className="text-vic-green">INR 150Cr</span>
-                                        <span className="text-vic-green">+</span>
+                                        <span className="text-[#52A264]">INR </span>
+                                        <span className="text-vic-navy">150Cr</span>
+                                        <span className="text-[#52A264]">+</span>
                                     </>
                                 ) : (
-                                    // Check if the generic component logic works or if I need specific styling per item
-                                    // Based on designs, 40+ is black? No wait, screenshot 4 shows:
-                                    // "40+" is Dark Blue/Navy (#123042) with Green plus? Or all green?
-                                    // Looking at "uploaded_image_4", "40+" is Black/Navy. "INR 150Cr+" is Green. "6+" is Black/Navy.
-                                    // Wait, checking closer at "uploaded_image_4_..." in the carousel.
-                                    // "40+" -> 40 is Navy, + is Green.
-                                    // "INR 150Cr+" -> All Green.
-                                    // "6+" -> 6 is Navy, + is Green.
-                                    // Labels are small navy/grey text.
-                                    // Bottom text is Green.
-
                                     <>
-                                        {stat.value.replace('+', '')}
-                                        <span className="text-vic-green">+</span>
+                                        <span className="text-vic-navy">{stat.value.replace('+', '')}</span>
+                                        <span className="text-[#52A264]">+</span>
                                     </>
                                 )}
                             </span>
-                            <span className="font-medium text-sm md:text-base text-[#123042]/70">
+                            <span className="font-medium text-sm md:text-base text-vic-navy/70 font-poppins">
                                 {stat.label}
                             </span>
                         </div>
                     ))}
                 </div>
 
-                <p className="text-vic-green font-normal text-sm md:text-lg max-w-2xl mx-auto">
+                <p className="text-[#188028] font-light text-[20px] leading-none tracking-normal mx-auto w-full max-w-[732px] font-poppins">
                     We have assessed over 40+ organisations with INR 150 Cr+ CSR fund value
                 </p>
             </div>

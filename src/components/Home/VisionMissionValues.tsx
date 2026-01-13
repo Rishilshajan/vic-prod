@@ -59,7 +59,6 @@ const VisionMissionValues: React.FC = () => {
 
       </div>
 
-      {/* Decorative Blob */}
       <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-64 h-96 bg-[#4CD964]/10 rounded-blob blur-3xl -z-10 pointer-events-none"></div>
     </section>
   );
