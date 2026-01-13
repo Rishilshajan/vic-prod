@@ -2,8 +2,8 @@ import React from 'react';
 
 const ContactForm: React.FC = () => {
     return (
-        <div className="w-full max-w-[500px] border border-[#23A6F0] rounded-[10px] p-6 md:p-10 bg-white">
-            <h2 className="text-[#123042] font-semibold text-2xl md:text-3xl mb-8 text-center">
+        <div className="w-[622px] border border-[#23A6F0] rounded-[30px] p-6 md:p-10 bg-white flex flex-col">
+            <h2 className="text-[#123042] font-semibold text-2xl md:text-3xl mb-8">
                 Contact Us
             </h2>
 
@@ -36,16 +36,18 @@ const ContactForm: React.FC = () => {
                     />
                 </div>
 
-                <div className="flex flex-col md:flex-row items-center gap-4 mt-2">
-                    <button
-                        type="button"
-                        className="flex-1 w-full h-[50px] bg-[#EEF8FC] text-[#23A6F0] rounded-[30px] font-medium hover:bg-[#dcebf1] transition-colors"
+                <div className="flex flex-col md:flex-row items-center justify-between gap-[10px]">
+                    <a
+                        href="https://calendly.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-[210px] h-[58px] bg-[#C8E5F2] text-[#0C87BE] rounded-[30px] font-medium hover:bg-[#bde0ef] transition-colors flex items-center justify-center cursor-pointer"
                     >
                         Schedule a Meeting
-                    </button>
+                    </a>
                     <button
                         type="submit"
-                        className="flex-1 w-full h-[50px] bg-[#14709F] text-white rounded-[30px] font-medium hover:bg-[#105a80] transition-colors"
+                        className="w-[210px] h-[58px] bg-[#0C87BE] text-[#ffffff] rounded-[30px] font-medium hover:bg-[#105a80] transition-colors flex items-center justify-center"
                     >
                         Send Message
                     </button>

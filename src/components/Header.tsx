@@ -43,8 +43,8 @@ const Header: React.FC = () => {
                 className={cn(
                   "px-6 py-2.5 rounded-full transition-all duration-200 font-sans font-normal text-[16px] leading-none tracking-normal",
                   isActive
-                    ? "bg-[#6BC778] text-[#123042]" // Active: Green Bg, Navy Text
-                    : "bg-transparent text-[#123042] hover:text-[#6BC778]" // Inactive: Navy Text, Green Hover
+                    ? "bg-[#6BC778] text-[#123042]"
+                    : "bg-transparent text-[#123042] hover:text-[#6BC778]"
                 )}
               >
                 {item.label}
@@ -55,7 +55,12 @@ const Header: React.FC = () => {
           {/* Contact Us Button */}
           <Link to="/contact" onClick={() => window.scrollTo(0, 0)}>
             <Button
-              className="ml-4 rounded-full font-sans font-normal text-[16px] leading-none tracking-normal bg-[#123042] text-[#6AC777] hover:bg-[#123042]/90 hover:text-[#6AC777]"
+              className={cn(
+                "ml-4 rounded-full font-sans font-normal text-[16px] leading-none tracking-normal transition-colors",
+                currentPath === '/contact'
+                  ? "bg-[#6BC778] text-[#123042] hover:bg-[#6BC778]/90"
+                  : "bg-[#123042] text-[#6AC777] hover:bg-[#123042]/90 hover:text-[#6AC777]"
+              )}
             >
               Contact Us
             </Button>
