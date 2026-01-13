@@ -7,29 +7,40 @@ interface ResourceCardProps {
 
 const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
     return (
-        <div className="w-full max-w-[900px] bg-white rounded-[30px] border border-[#146D99] overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow duration-300">
-            {/* Image Section */}
-            <div className="w-full md:w-[320px] h-[240px] md:h-auto flex-shrink-0">
-                <img
-                    src={resource.image}
-                    alt={resource.title}
-                    className="w-full h-full object-cover"
-                />
-            </div>
+        <div
+            className="relative w-[867px] h-[261px] flex-shrink-0 rounded-[30px] p-[3px]"
+            style={{
+                background: "linear-gradient(232.11deg, rgba(10, 90, 138, 0.8) -36.66%, rgba(12, 135, 190, 0.5) 119.48%)"
+            }}
+        >
+            <div className="w-full h-full bg-white rounded-[27px] flex overflow-hidden">
+                {/* Image Section */}
+                <div className="w-[286px] h-full flex-shrink-0">
+                    <img
+                        src={resource.image}
+                        alt={resource.title}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
 
-            {/* Content Section */}
-            <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
-                <p className="text-[#123042] font-semibold text-sm mb-2">
-                    {resource.author}
-                </p>
+                {/* Content Section */}
+                <div className="flex-1 pt-[38px] pl-[43px] pr-[40px] flex flex-col items-start text-left">
+                    <p className="font-['Poppins'] font-medium text-[13px] leading-[100%]  mb-[20px]">
+                        {resource.author}
+                    </p>
 
-                <h3 className="text-[#123042] font-bold text-xl md:text-2xl mb-4 leading-tight">
-                    {resource.title}
-                </h3>
+                    <div className="w-[501px] mb-[24px]">
+                        <h3 className="font-['Poppins'] font-medium text-[20px] text-[#123042] leading-tight">
+                            {resource.title}
+                        </h3>
+                    </div>
 
-                <p className="text-[#14709F] font-light text-sm md:text-base leading-relaxed">
-                    {resource.description}
-                </p>
+                    <div className="w-[501px]">
+                        <p className="font-['Poppins'] font-light text-[15px] leading-relaxed text-[#0C87BE]">
+                            {resource.description}
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     );

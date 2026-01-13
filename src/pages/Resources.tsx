@@ -4,11 +4,8 @@ import ResourceCard from '../components/Resources/ResourceCard';
 import { resources } from '../data/resourcesData';
 
 const Resources: React.FC = () => {
-    // Pagination state (static for now as per design mockup)
     const [currentPage, setCurrentPage] = useState(1);
 
-    // In a real app, we would slice the resources array based on items per page
-    // For now, we just display all 3 items to match the design
 
     return (
         <div className="w-full bg-white">
@@ -23,22 +20,22 @@ const Resources: React.FC = () => {
                 </div>
 
                 {/* Pagination */}
-                <div className="flex items-center gap-2 md:gap-4 mb-16">
+                <div className="flex items-center justify-between w-[868px] mt-8">
                     <button
-                        className="px-4 py-2 bg-[#DCEBF1] text-[#14709F] rounded-lg text-sm font-medium hover:bg-[#cbe0e9] transition-colors disabled:opacity-50"
+                        className="w-[153px] h-[58px] rounded-[30px] bg-[#C8E5F2] text-[#0C87BE] font-['Poppins'] font-medium text-[16px] flex items-center justify-center gap-[10px] hover:bg-[#b8daea] transition-colors"
                         disabled
                     >
-                        ← Previous
+                        <span>&larr;</span> Previous
                     </button>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-[10px]">
                         {[1, 2, 3, 4, 5, 6, 7].map((num) => (
                             <button
                                 key={num}
                                 onClick={() => setCurrentPage(num)}
-                                className={`w-8 h-8 rounded-md flex items-center justify-center text-sm transition-colors ${currentPage === num
-                                        ? 'bg-[#14709F] text-white'
-                                        : 'bg-white border border-[#DCEBF1] text-[#14709F] hover:border-[#14709F]'
+                                className={`w-[40px] h-[40px] rounded-[5px] flex items-center justify-center text-[14px] font-['Poppins'] font-medium transition-colors border ${currentPage === num
+                                    ? 'bg-[#0C87BE] border-[#0C87BE] text-white'
+                                    : 'bg-white border-[#0C87BE] text-[#0C87BE] hover:bg-[#f0f9fc]'
                                     }`}
                             >
                                 {num}
@@ -47,9 +44,9 @@ const Resources: React.FC = () => {
                     </div>
 
                     <button
-                        className="px-6 py-2 bg-[#DCEBF1] text-[#14709F] rounded-lg text-sm font-medium hover:bg-[#cbe0e9] transition-colors"
+                        className="w-[120px] h-[58px] rounded-[30px] bg-[#C8E5F2] text-[#0C87BE] font-['Poppins'] font-medium text-[16px] flex items-center justify-center gap-[10px] hover:bg-[#b8daea] transition-colors"
                     >
-                        Next →
+                        Next <span>&rarr;</span>
                     </button>
                 </div>
             </section>
