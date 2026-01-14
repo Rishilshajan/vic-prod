@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { WorkService } from '../../data/ourWorkData';
 
 interface WorkCardProps {
@@ -7,10 +8,12 @@ interface WorkCardProps {
 
 const WorkCard: React.FC<WorkCardProps> = ({ service }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div
-            className="relative w-full h-[400px] rounded-[30px] border border-[#23A6F0] overflow-hidden p-8 transition-all duration-500 ease-in-out"
+            onClick={() => navigate(`/our-work/${service.id}`)}
+            className="relative w-full h-[400px] rounded-[30px] border border-[#23A6F0] overflow-hidden p-8 transition-all duration-500 ease-in-out cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{
