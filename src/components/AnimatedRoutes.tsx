@@ -9,6 +9,9 @@ import OurWork from '../pages/OurWork';
 import Careers from '../pages/Careers';
 import TeamMemberDetail from '../pages/TeamMemberDetail';
 import OurWorkDetail from '../pages/OurWorkDetail';
+import ResourceDetail from '../pages/ResourceDetail';
+import ResourceDetailECCE from '../pages/ResourceDetailECCE';
+import ResourceDetailIFC from '../pages/ResourceDetailIFC';
 import PageTransition from './PageTransition';
 
 const AnimatedRoutes: React.FC = () => {
@@ -25,6 +28,9 @@ const AnimatedRoutes: React.FC = () => {
                 <Route path="/careers" element={<PageTransition><Careers /></PageTransition>} />
                 <Route path="/about-us/team/:id" element={<PageTransition><TeamMemberDetail /></PageTransition>} />
                 <Route path="/our-work/:id" element={<PageTransition><OurWorkDetail /></PageTransition>} />
+                <Route path="/resource-detail" element={<PageTransition><ResourceDetail /></PageTransition>} />
+                <Route path="/resource-detail-ifc" element={<PageTransition><ResourceDetailIFC /></PageTransition>} />
+                <Route path="/resource-detail-ecce" element={<PageTransition><ResourceDetailECCE /></PageTransition>} />
             </Routes>
         </AnimatePresence>
     );

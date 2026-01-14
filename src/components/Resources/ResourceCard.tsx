@@ -1,19 +1,33 @@
 import React from 'react';
-import type { Resource } from '../../data/resourcesData';
+import { useNavigate } from 'react-router-dom';
+
 
 interface ResourceCardProps {
     resource: Resource;
 }
 
 const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        if (resource.id === 1) {
+            navigate('/resource-detail');
+        } else if (resource.id === 2) {
+            navigate('/resource-detail-ifc');
+        } else if (resource.id === 3) {
+            navigate('/resource-detail-ecce');
+        }
+    };
+
     return (
         <div
-            className="relative w-[867px] h-[261px] flex-shrink-0 rounded-[30px] p-[3px]"
+            className="relative w-[867px] h-[261px] flex-shrink-0 rounded-[30px] p-[3px] cursor-pointer"
             style={{
                 background: "linear-gradient(232.11deg, rgba(10, 90, 138, 0.8) -36.66%, rgba(12, 135, 190, 0.5) 119.48%)"
             }}
+            onClick={handleClick}
         >
-            <div className="w-full h-full bg-white rounded-[27px] flex overflow-hidden">
+<div className="w-full h-full bg-white rounded-[27px] flex overflow-hidden">
                 {/* Image Section */}
                 <div className="w-[286px] h-full flex-shrink-0">
                     <img
