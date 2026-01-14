@@ -33,7 +33,9 @@ const Header: React.FC = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-2">
           {navItems.map((item) => {
-            const isActive = currentPath === item.path;
+            const isActive = item.path === '/'
+              ? currentPath === '/'
+              : currentPath.startsWith(item.path);
 
             return (
               <Link

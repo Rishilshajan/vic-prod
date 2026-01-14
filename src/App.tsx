@@ -7,6 +7,7 @@ import Resources from './pages/Resources';
 import Contact from './pages/Contact';
 import OurWork from './pages/OurWork';
 import Careers from './pages/Careers';
+import TeamMemberDetail from './pages/TeamMemberDetail';
 import ScrollToTop from './components/ui/ScrollToTop';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-work" element={<OurWork />} />
           <Route path="/careers" element={<Careers />} />
+          <Route path="/about-us/team/:id" element={<TeamMemberDetail />} />
         </Routes>
 
         <Footer />
