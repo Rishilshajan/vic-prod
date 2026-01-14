@@ -18,17 +18,30 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="w-full py-5 px-6 md:px-10 bg-white sticky top-0 z-50">
+    <header className="w-full py-5 px-6 md:px-10 bg-white relative z-40">
       <div className="w-full flex items-center justify-between">
 
-        {/* Logo Section */}
-        <Link to="/" className="flex items-center gap-3" onClick={() => window.scrollTo(0, 0)}>
+        {/* Fixed Logo (Visible) */}
+        <Link
+          to="/"
+          className="fixed top-5 left-6 md:left-10 z-50 flex items-center gap-3"
+          onClick={() => window.scrollTo(0, 0)}
+        >
           <img
             src={vicLogo}
             alt="VIC Logo"
             className="h-14 w-auto object-contain"
           />
         </Link>
+
+        {/* Placeholder Logo (Invisible, for Layout) */}
+        <div className="opacity-0 pointer-events-none flex items-center gap-3">
+          <img
+            src={vicLogo}
+            alt="VIC Logo Placeholder"
+            className="h-14 w-auto object-contain"
+          />
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-2">

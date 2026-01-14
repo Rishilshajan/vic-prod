@@ -1,3 +1,10 @@
+import ImpactMeasurementImg from '../assets/Impact_measurement.jpg';
+import MELTrainingImg from '../assets/MEL_Training.jpg';
+import ResearchImg from '../assets/Research.jpg';
+import StrategyDevelopmentImg from '../assets/meeting.jpg';
+import CSRAlignmentImg from '../assets/CSR.jpg';
+import ToolFrameworkImg from '../assets/Tool&Framework.jpg';
+
 export interface WorkService {
     id: number;
     title: string;
@@ -18,7 +25,7 @@ export const workServices: WorkService[] = [
             "Impact Evaluation (Baseline, Midline and Endline Studies)",
             "Social Return on Investment"
         ],
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=500&auto=format&fit=crop"
+        image: ImpactMeasurementImg
     },
     {
         id: 2,
@@ -28,7 +35,7 @@ export const workServices: WorkService[] = [
             "Data-based Decision Making",
             "Designing Data Collection Tools"
         ],
-        image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=500&auto=format&fit=crop"
+        image: MELTrainingImg
     },
     {
         id: 3,
@@ -40,7 +47,7 @@ export const workServices: WorkService[] = [
             "Difference-in-difference",
             "Randomised Control Trial"
         ],
-        image: "https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?q=80&w=500&auto=format&fit=crop"
+        image: ResearchImg
     },
     {
         id: 4,
@@ -49,13 +56,13 @@ export const workServices: WorkService[] = [
             "Advisory on Programme Design and optimum resource allocation",
             "Support in aligning CSR initiatives with UN SDGs and Schedule VII activities of Companies Act 2013"
         ],
-        image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=500&auto=format&fit=crop"
+        image: StrategyDevelopmentImg
     },
     {
         id: 5,
         title: "CSR & SDG Alignment",
         description: "Evaluated an education project with a reach of 3,000+ students and 60+ schools in Karnataka.",
-        image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=500&auto=format&fit=crop"
+        image: CSRAlignmentImg
     },
     {
         id: 6,
@@ -66,6 +73,6 @@ export const workServices: WorkService[] = [
             "MEL Framework",
             "Building customised dashboards and reporting mechanisms"
         ],
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=500&auto=format&fit=crop"
+        image: ToolFrameworkImg
     }
 ];

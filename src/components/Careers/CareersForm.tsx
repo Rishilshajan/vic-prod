@@ -1,9 +1,27 @@
 import React, { useState, useRef } from 'react';
-import { Paperclip, X } from 'lucide-react';
+import { Paperclip, X, Loader2 } from 'lucide-react';
 
 const CareersForm: React.FC = () => {
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phone: '',
+        qualification: '',
+        experience: '',
+        profileInterest: ''
+    });
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // This URL will be replaced by the user after they deploy their Google Script
+    const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || '';
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData(prev => ({ ...prev, [id]: value }));
+    };
 
     const handleAttachClick = () => {
         fileInputRef.current?.click();
@@ -22,6 +40,80 @@ const CareersForm: React.FC = () => {
         }
     };
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!GOOGLE_SCRIPT_URL) {
+            alert("Please configure the Google Script URL in your .env file.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        setSubmitStatus('idle');
+
+        try {
+            // Convert file to base64 if exists
+            let fileData = "";
+            let fileName = "";
+            let mimeType = "";
+
+            if (selectedFile) {
+                const reader = new FileReader();
+                fileData = await new Promise((resolve) => {
+                    reader.onload = (e) => resolve(e.target?.result as string);
+                    reader.readAsDataURL(selectedFile);
+                });
+                // Remove the "data:*/*;base64," part
+                fileData = fileData.split(',')[1];
+                fileName = selectedFile.name;
+                mimeType = selectedFile.type;
+            }
+
+            // Prepare payload for Google Script
+            // We use URLSearchParams or FormData depending on how the script is set up.
+            // For simple JSON handling in Apps Script, sending raw JSON is often easiest if we handle CORS correctly,
+            // but standard 'application/x-www-form-urlencoded' is more robust for simple scripts without complex CORS setup.
+            // However, for large files, JSON body is better. Let's try standard JSON fetch no-cors (opaque) or standard text.
+
+            // To ensure compatibility with most simple Apps Script setups, `text/plain` body with JSON content is a common trick to avoid CORS preflight,
+            // or we accept the opaque response.
+
+            const payload = {
+                ...formData,
+                fileName,
+                mimeType,
+                fileData
+            };
+
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+                // mode: "no-cors" // We might need this if we don't handle CORS in the script.
+                // However, if we want to know if it success, we hope for CORS headers from the script.
+            });
+
+            // Assuming success if no network error (with no-cors we can't read response)
+            // Or better, let's assume the user will deploy the script with proper CORS headers (instruction provided).
+
+            setSubmitStatus('success');
+            setFormData({
+                fullName: '',
+                email: '',
+                phone: '',
+                qualification: '',
+                experience: '',
+                profileInterest: ''
+            });
+            handleRemoveFile();
+
+        } catch (error) {
+            console.error("Submission Error:", error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <section className="container mx-auto px-4 py-6 md:py-10">
 
@@ -31,71 +123,110 @@ const CareersForm: React.FC = () => {
                     Apply Here
                 </h3>
 
-                <form className="space-y-6">
-                    {/* Full Name */}
-                    <div className="relative">
-                        <input
-                            type="text"
-                            id="fullName"
-                            placeholder="Full Name"
-                            className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
-                        />
+                {submitStatus === 'success' ? (
+                    <div className="text-center py-10">
+                        <h4 className="text-2xl font-semibold text-green-600 mb-4">Application Sent!</h4>
+                        <p className="text-gray-600">Thank you for applying. We will get back to you soon.</p>
+                        <button
+                            onClick={() => setSubmitStatus('idle')}
+                            className="mt-6 text-[#0077B6] underline"
+                        >
+                            Submit another response
+                        </button>
                     </div>
-
-                    {/* Email */}
-                    <div className="relative">
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Email"
-                            className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
-                        />
-                    </div>
-
-                    {/* Education */}
-                    <div className="relative">
-                        <input
-                            type="text"
-                            id="education"
-                            placeholder="Education"
-                            className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
-                        />
-                    </div>
-
-                    {/* Position Applied For */}
-                    <div className="relative">
-                        <div className="flex items-center border border-[#23A6F0] rounded-full px-6 h-12 md:h-14 bg-white">
+                ) : (
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                        {/* Full Name */}
+                        <div className="relative">
                             <input
                                 type="text"
-                                id="position"
-                                placeholder="Position Applied For"
-                                className="flex-1 w-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none text-sm bg-transparent"
+                                id="fullName"
+                                value={formData.fullName}
+                                onChange={handleInputChange}
+                                required
+                                placeholder="Full Name"
+                                className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
                             />
-
                         </div>
-                    </div>
 
-                    {/* Message */}
-                    <div className="relative">
-                        <div className="w-full border border-[#23A6F0] rounded-[30px] p-6 min-h-[200px] flex flex-col bg-white">
-                            <textarea
-                                id="message"
-                                placeholder="Your Message along with CV"
-                                className="w-full flex-1 text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none resize-none text-sm bg-transparent mb-4"
+                        {/* Email */}
+                        <div className="relative">
+                            <input
+                                type="email"
+                                id="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                required
+                                placeholder="Email"
+                                className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
                             />
+                        </div>
 
-                            <div className="flex justify-between items-end">
-                                <div>
+                        {/* Phone */}
+                        <div className="relative">
+                            <input
+                                type="tel"
+                                id="phone"
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                                required
+                                placeholder="Phone"
+                                className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
+                            />
+                        </div>
+
+                        {/* Highest Qualification */}
+                        <div className="relative">
+                            <input
+                                type="text"
+                                id="qualification"
+                                value={formData.qualification}
+                                onChange={handleInputChange}
+                                required
+                                placeholder="Highest Qualification"
+                                className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
+                            />
+                        </div>
+
+                        {/* Experience */}
+                        <div className="relative">
+                            <input
+                                type="number"
+                                id="experience"
+                                value={formData.experience}
+                                onChange={handleInputChange}
+                                required
+                                placeholder="Total work experience (in months)"
+                                className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
+                            />
+                        </div>
+
+                        {/* Profile Looking For */}
+                        <div className="relative">
+                            <input
+                                type="text"
+                                id="profileInterest"
+                                value={formData.profileInterest}
+                                onChange={handleInputChange}
+                                required
+                                placeholder="Profile looking for (Interest area of work)"
+                                className="w-full h-12 md:h-14 px-6 border border-[#23A6F0] rounded-full text-[#23A6F0] placeholder-[#23A6F0] placeholder:italic placeholder:font-light focus:outline-none focus:ring-1 focus:ring-[#23A6F0] bg-white text-sm"
+                            />
+                        </div>
+
+                        {/* File Upload Area */}
+                        <div className="relative">
+                            <div className="flex justify-between items-center border border-[#23A6F0] rounded-full px-6 py-2 h-12 md:h-14">
+                                <span className="text-[#23A6F0] italic font-light text-sm">
+                                    {selectedFile ? selectedFile.name : "Upload Resume"}
+                                </span>
+
+                                <div className="flex items-center gap-2">
                                     {selectedFile && (
-                                        <div className="flex items-center gap-2 bg-[#E1F1F8] text-[#23A6F0] text-xs px-3 py-1 rounded-full">
-                                            <span className="truncate max-w-[200px]">{selectedFile.name}</span>
-                                            <button type="button" onClick={handleRemoveFile} className="hover:text-red-500">
-                                                <X size={12} />
-                                            </button>
-                                        </div>
+                                        <button type="button" onClick={handleRemoveFile} className="hover:text-red-500 mr-2">
+                                            <X size={16} />
+                                        </button>
                                     )}
-                                </div>
-                                <div>
                                     <input
                                         type="file"
                                         ref={fileInputRef}
@@ -113,19 +244,26 @@ const CareersForm: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Submit Button */}
-                    <div className="flex justify-end pt-2">
-                        <button
-                            type="submit"
-                            className="bg-[#0077B6] text-white font-medium text-sm px-8 py-3 rounded-full hover:bg-[#026aa1] transition-colors shadow-lg shadow-[#0077B6]/20"
-                        >
-                            Send Message
-                        </button>
-                    </div>
+                        {/* Submit Button */}
+                        <div className="flex justify-end pt-2">
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="bg-[#0077B6] text-white font-medium text-sm px-8 py-3 rounded-full hover:bg-[#026aa1] transition-colors shadow-lg shadow-[#0077B6]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                            >
+                                {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                                {isSubmitting ? 'Sending...' : 'Send Message'}
+                            </button>
+                        </div>
 
-                </form>
+                        {submitStatus === 'error' && (
+                            <p className="text-red-500 text-center text-sm">
+                                Something went wrong. Please try again.
+                            </p>
+                        )}
+                    </form>
+                )}
             </div>
         </section>
     );
