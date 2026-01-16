@@ -27,7 +27,7 @@ const OurWorkDetail: React.FC = () => {
         <div className="w-full bg-white font-poppins text-[#123042]">
             {/* Back Button */}
             <div className="container mx-auto px-4 pt-8 flex justify-center">
-                <div className="w-full max-w-[1190px]">
+                <div className="hidden md:block w-full max-w-[1190px]">
                     <button
                         onClick={() => navigate('/our-work')}
                         className="flex items-center gap-[10px] text-[#0C87BE] font-medium text-[16px] transition-all hover:opacity-80"
@@ -37,7 +37,6 @@ const OurWorkDetail: React.FC = () => {
                             borderRadius: '30px',
                             padding: '21px 25px',
                             backgroundColor: '#C8E5F2',
-                            // border: 'none' // Removing border if present before, as not specified in new design
                         }}
                     >
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,8 +61,10 @@ const OurWorkDetail: React.FC = () => {
                 </div>
             </div>
 
+
             {/* Content */}
             <div className="container mx-auto px-4 max-w-[1022px] mb-40 space-y-20">
+
 
                 {/* Main Description */}
                 <div>
@@ -74,6 +75,7 @@ const OurWorkDetail: React.FC = () => {
                         {detailData.description}
                     </p>
                 </div>
+
 
                 {/* Sections */}
                 {detailData.sections.map((section, index) => (

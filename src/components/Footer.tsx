@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
               </a>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <h4 className="font-medium text-[15px] leading-none font-poppins">
                 Website
               </h4>
@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
                   className="md:hidden text-white hover:opacity-80 transition-opacity"
                   aria-label="VIC LinkedIn"
                 >
-                  <svg width="48" height="48" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M29.6667 3C30.5507 3 31.3986 3.35119 32.0237 3.97631C32.6488 4.60143 33 5.44928 33 6.33333V29.6667C33 30.5507 32.6488 31.3986 32.0237 32.0237C31.3986 32.6488 30.5507 33 29.6667 33H6.33333C5.44928 33 4.60143 32.6488 3.97631 32.0237C3.35119 31.3986 3 30.5507 3 29.6667V6.33333C3 5.44928 3.35119 4.60143 3.97631 3.97631C4.60143 3.35119 5.44928 3 6.33333 3H29.6667ZM28.8333 28.8333V20C28.8333 18.559 28.2609 17.177 27.2419 16.1581C26.223 15.1391 24.841 14.5667 23.4 14.5667C21.9833 14.5667 20.3333 15.4333 19.5333 16.7333V14.8833H14.8833V28.8333H19.5333V20.6167C19.5333 19.3333 20.5667 18.2833 21.85 18.2833C22.4688 18.2833 23.0623 18.5292 23.4999 18.9668C23.9375 19.4043 24.1833 19.9978 24.1833 20.6167V28.8333H28.8333ZM9.46667 12.2667C10.2093 12.2667 10.9215 11.9717 11.4466 11.4466C11.9717 10.9215 12.2667 10.2093 12.2667 9.46667C12.2667 7.91667 11.0167 6.65 9.46667 6.65C8.71964 6.65 8.00321 6.94675 7.47498 7.47498C6.94675 8.00321 6.65 8.71964 6.65 9.46667C6.65 11.0167 7.91667 12.2667 9.46667 12.2667ZM11.7833 28.8333V14.8833H7.16667V28.8333H11.7833Z" fill="white" />
                   </svg>
                 </a>
@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
         <div className="contents md:flex flex-row gap-12 xl:gap-16 h-full items-start w-full xl:w-auto justify-between xl:justify-start xl:order-3">
 
           {/* Links Order on Mobile */}
-          <div className="flex flex-col text-left gap-3 order-1 md:order-none px-4 md:px-0">
+          <div className="flex flex-col text-left gap-3 order-1 md:order-none px-4 md:px-0 w-full max-w-[312px] mx-auto md:max-w-none md:mx-0">
             {[
               { name: 'Home', path: '/' },
               { name: 'About Us', path: '/about-us' },

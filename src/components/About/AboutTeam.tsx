@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { teamMembers } from '../../data/teamData';
 
-
 const AboutTeam: React.FC = () => {
     return (
         <section className="w-full flex justify-center pt-0 pb-[120px]">
@@ -19,6 +18,7 @@ const AboutTeam: React.FC = () => {
                             className="bg-[#E2F4FC] rounded-[30px] flex flex-col items-center justify-center p-6 text-center hover:shadow-lg transition-shadow duration-300 shrink-0 block overflow-hidden w-full md:max-w-[337px] mx-auto aspect-[337/481]"
                             style={{}}
                         >
+
                             {/* Image Circle */}
                             <div className="w-[150px] h-[150px] mb-6 rounded-full overflow-hidden border-4 border-white shadow-sm mx-auto relative">
                                 <img
@@ -34,15 +34,18 @@ const AboutTeam: React.FC = () => {
                                 />
                             </div>
 
+
                             {/* Name */}
                             <h3 className="font-semibold text-xl text-[#123042] mb-2">
                                 {member.name}
                             </h3>
 
+
                             {/* Role */}
                             <p className="font-light text-sm text-[#123042]/70 mb-8 max-w-[200px] leading-tight mx-auto">
                                 {member.role}
                             </p>
+
 
                             {/* LinkedIn Icon */}
                             <div

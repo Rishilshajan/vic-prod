@@ -35,26 +35,66 @@ export const ourWorkDetails: Record<number, OurWorkDetail> = {
     1: {
         id: 1,
         title: "Impact Measurement & Advisory",
-        description: commonDescription,
-        sections: commonSections
+        description: "",
+        sections: [
+            {
+                title: "",
+                items: [
+                    "Needs Assessment",
+                    "Feasibility Study",
+                    "Process Evaluation",
+                    "Outcome Evaluation",
+                    "Impact Evaluation (Baseline, Midline and Endline Studies)",
+                    "Social Return on Investment"
+                ]
+            }
+        ]
     },
     2: {
         id: 2,
         title: "MEL Training & Capacity Building",
-        description: commonDescription,
-        sections: commonSections
+        description: "",
+        sections: [
+            {
+                title: "",
+                items: [
+                    "Impact Assessment Frameworks",
+                    "Data-based Decision Making",
+                    "Designing Data Collection Tools"
+                ]
+            }
+        ]
     },
     3: {
         id: 3,
         title: "Research",
-        description: commonDescription,
-        sections: commonSections
+        description: "",
+        sections: [
+            {
+                title: "",
+                items: [
+                    "Quantitative",
+                    "Qualitative",
+                    "Mixed-Method",
+                    "Difference-in Difference",
+                    "Randomised Control Trial"
+                ]
+            }
+        ]
     },
     4: {
         id: 4,
         title: "Strategy & Development",
-        description: commonDescription,
-        sections: commonSections
+        description: "",
+        sections: [
+            {
+                title: "",
+                items: [
+                    "Advisory on Programme Design and optimum resource allocation",
+                    "Support in aligning CSR initiatives with UN SDGs and Schedule VII activities of Companies Act 1925"
+                ]
+            }
+        ]
     },
     5: {
         id: 5,
@@ -65,7 +105,17 @@ export const ourWorkDetails: Record<number, OurWorkDetail> = {
     6: {
         id: 6,
         title: "Tool & Framework Creation",
-        description: commonDescription,
-        sections: commonSections
+        description: "",
+        sections: [
+            {
+                title: "",
+                items: [
+                    "Theory of Change",
+                    "Logframe Matrix",
+                    "MEL Framework",
+                    "Building customised dashboards and reporting mechanisms"
+                ]
+            }
+        ]
     }
 };

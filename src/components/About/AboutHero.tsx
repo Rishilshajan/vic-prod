@@ -6,7 +6,7 @@ const AboutHero: React.FC = () => {
   return (
     <section className="w-full flex justify-center pt-0 md:pt-8 pb-0">
 
-      {/* Mobile Layout (New) */}
+      {/* Mobile Layout  */}
       <div className="md:hidden w-full relative bg-white flex flex-col items-center overflow-hidden">
         <div className="relative mt-[25px] group w-full h-[350px] flex justify-center">
           <img
@@ -14,6 +14,7 @@ const AboutHero: React.FC = () => {
             alt="Who We Are"
             className="absolute left-[-27px] top-0 w-[437px] h-[350px] max-w-none object-cover rounded-[58px]"
           />
+
           {/* Text Overlay Mobile */}
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 pt-10">
             <h1 className="font-semibold text-[20px] leading-[24px] text-white text-center tracking-normal mb-3 font-poppins">
@@ -26,7 +27,7 @@ const AboutHero: React.FC = () => {
         </div>
       </div>
 
-      {/* Desktop Layout (Existing) */}
+      {/* Desktop Layout */}
       <div className="hidden md:flex container mx-auto px-4 justify-center">
         <div className="relative w-full max-w-[1273px]">
 

@@ -40,7 +40,6 @@ const AboutSectors: React.FC = () => {
 
                         {/* Mobile Sector Stack */}
                         <div className="md:hidden flex flex-col items-center gap-4 w-full text-[18px] font-light">
-                            {/* Flatten the array for mobile vertical list */}
                             {sectors.flat().map((item, index) => (
                                 <React.Fragment key={item}>
                                     <span className="whitespace-nowrap">{item}</span>
