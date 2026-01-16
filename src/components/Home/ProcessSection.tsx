@@ -26,117 +26,122 @@ const ProcessSection: React.FC = () => {
 
       {/* Main Container */}
       <div
-        className="bg-[#E6F7FF] rounded-[50px] relative"
+        className="bg-[#E6F7FF] rounded-[50px] relative mx-4 md:mx-0 w-full md:w-auto"
         style={{
-          width: '1187px',
+          maxWidth: '1187px',
           minHeight: '736px',
-          padding: '80px 40px',
         }}
       >
+        <div className="p-10 md:p-[80px_40px] h-full">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-full relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-full relative">
 
-          {/* --- COLUMN 1: DATA --- */}
-          <div className="flex flex-col items-center text-left px-6 relative">
-            <div className="mb-6 text-[#0C87BE]">
-              <Database02Icon width={112} height={112} />
+            {/* --- COLUMN 1: DATA --- */}
+            <div className="flex flex-col items-center text-left px-6 relative">
+              <div className="mb-6 text-[#0C87BE]">
+                <Database02Icon width={112} height={112} />
+              </div>
+
+              <h3 className="font-semibold text-[20px] leading-[30px] text-[#123042] mb-8">
+                Data
+              </h3>
+
+              <div className="flex flex-col gap-6 text-[15px] leading-normal max-w-[260px]">
+                <p>
+                  <span className="text-[#123042] font-semibold">Design:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Develop frameworks for data collection that align with organisational goals.
+                  </span>
+                </p>
+
+                <p>
+                  <span className="text-[#123042] font-semibold">Develop:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Build tools, surveys, and systems for efficient data collection and storage.
+                  </span>
+                </p>
+
+                <p>
+                  <span className="text-[#123042] font-semibold">Implement:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Execute data collection processes, ensuring quality and consistency.
+                  </span>
+                </p>
+
+                <p>
+                  <span className="text-[#123042] font-semibold">Measure:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Track and monitor data quality and integrity in real-time.
+                  </span>
+                </p>
+              </div>
+
+              <div className="hidden md:block absolute right-0 top-10 bottom-0 w-[2px] bg-[#9BBECE] h-[400px] opacity-70"></div>
+              {/* Mobile Separator */}
+              <div className="block md:hidden w-full h-[1px] border-t border-dashed border-[#9BBECE] my-8 relative"></div>
             </div>
 
-            <h3 className="font-semibold text-[20px] leading-[30px] text-[#123042] mb-8">
-              Data
-            </h3>
 
-            <div className="flex flex-col gap-6 text-[15px] leading-normal max-w-[260px]">
-              <p>
-                <span className="text-[#123042] font-semibold">Design:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Develop frameworks for data collection that align with organisational goals.
-                </span>
-              </p>
+            {/* --- COLUMN 2: DECISION --- */}
+            <div className="flex flex-col items-center text-left px-6 relative">
+              <div className="mb-6 text-[#0C87BE] -rotate-90">
+                <Network strokeWidth={1.5} size={112} />
+              </div>
 
-              <p>
-                <span className="text-[#123042] font-semibold">Develop:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Build tools, surveys, and systems for efficient data collection and storage.
-                </span>
-              </p>
+              <h3 className="font-semibold text-[20px] leading-[30px] text-[#123042] mb-8">
+                Decision
+              </h3>
 
-              <p>
-                <span className="text-[#123042] font-semibold">Implement:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Execute data collection processes, ensuring quality and consistency.
-                </span>
-              </p>
+              <div className="flex flex-col gap-6 text-[15px] leading-normal max-w-[260px]">
+                <p>
+                  <span className="text-[#123042] font-semibold">Analyse:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Interpret the collected data to derive insights and actionable findings.
+                  </span>
+                </p>
 
-              <p>
-                <span className="text-[#123042] font-semibold">Measure:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Track and monitor data quality and integrity in real-time.
-                </span>
-              </p>
+                <p>
+                  <span className="text-[#123042] font-semibold">Communicate:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Share insights with stakeholders through visualisations, reports, and presentations to inform decision-making.
+                  </span>
+                </p>
+              </div>
+
+              <div className="hidden md:block absolute right-0 top-10 bottom-0 w-[2px] bg-[#9BBECE] h-[400px] opacity-70"></div>
+              {/* Mobile Separator */}
+              <div className="block md:hidden w-full h-[1px] border-t border-dashed border-[#9BBECE] my-8 relative"></div>
             </div>
 
-            <div className="hidden md:block absolute right-0 top-10 bottom-0 w-[2px] bg-[#9BBECE] h-[400px] opacity-70"></div>
+
+            {/* --- COLUMN 3: IMPACT --- */}
+            <div className="flex flex-col items-center text-left px-6">
+              <div className="mb-6 text-[#0C87BE]">
+                <Target strokeWidth={1.5} size={112} />
+              </div>
+
+              <h3 className="font-semibold text-[20px] leading-[30px] text-[#123042] mb-8">
+                Impact
+              </h3>
+
+              <div className="flex flex-col gap-6 text-[15px] leading-normal max-w-[260px]">
+                <p>
+                  <span className="text-[#123042] font-semibold">Grow:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Use data-driven decisions to scale programmes, enhance outcomes, and expand reach.
+                  </span>
+                </p>
+
+                <p>
+                  <span className="text-[#123042] font-semibold">Measure:</span>{' '}
+                  <span className="text-[#0C87BE] font-normal">
+                    Continuously evaluate the impact of implemented decisions against defined objectives.
+                  </span>
+                </p>
+              </div>
+            </div>
+
           </div>
-
-
-          {/* --- COLUMN 2: DECISION --- */}
-          <div className="flex flex-col items-center text-left px-6 relative">
-            <div className="mb-6 text-[#0C87BE] -rotate-90">
-              <Network strokeWidth={1.5} size={112} />
-            </div>
-
-            <h3 className="font-semibold text-[20px] leading-[30px] text-[#123042] mb-8">
-              Decision
-            </h3>
-
-            <div className="flex flex-col gap-6 text-[15px] leading-normal max-w-[260px]">
-              <p>
-                <span className="text-[#123042] font-semibold">Analyse:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Interpret the collected data to derive insights and actionable findings.
-                </span>
-              </p>
-
-              <p>
-                <span className="text-[#123042] font-semibold">Communicate:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Share insights with stakeholders through visualisations, reports, and presentations to inform decision-making.
-                </span>
-              </p>
-            </div>
-
-            <div className="hidden md:block absolute right-0 top-10 bottom-0 w-[2px] bg-[#9BBECE] h-[400px] opacity-70"></div>
-          </div>
-
-
-          {/* --- COLUMN 3: IMPACT --- */}
-          <div className="flex flex-col items-center text-left px-6">
-            <div className="mb-6 text-[#0C87BE]">
-              <Target strokeWidth={1.5} size={112} />
-            </div>
-
-            <h3 className="font-semibold text-[20px] leading-[30px] text-[#123042] mb-8">
-              Impact
-            </h3>
-
-            <div className="flex flex-col gap-6 text-[15px] leading-normal max-w-[260px]">
-              <p>
-                <span className="text-[#123042] font-semibold">Grow:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Use data-driven decisions to scale programmes, enhance outcomes, and expand reach.
-                </span>
-              </p>
-
-              <p>
-                <span className="text-[#123042] font-semibold">Measure:</span>{' '}
-                <span className="text-[#0C87BE] font-normal">
-                  Continuously evaluate the impact of implemented decisions against defined objectives.
-                </span>
-              </p>
-            </div>
-          </div>
-
         </div>
       </div>
     </section>
