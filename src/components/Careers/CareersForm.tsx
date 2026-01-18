@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Paperclip, X, Loader2 } from 'lucide-react';
+import { supabase } from '../../lib/supabaseClient';
 
 const CareersForm: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -16,32 +17,34 @@ const CareersForm: React.FC = () => {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // This URL will be replaced by the user after they deploy their Google Script
-    const GOOGLE_SCRIPT_URL = import.meta.env.VITE_APPS_CAREER_URL;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        setFormData(prev => ({ ...prev, [id]: value }));
+        setFormData((prev: typeof formData) => ({ ...prev, [id]: value }));
     };
 
+
     const handleCheckboxChange = (position: string) => {
-        setFormData(prev => ({
+        setFormData((prev: typeof formData) => ({
             ...prev,
             profileInterest: prev.profileInterest.includes(position)
-                ? prev.profileInterest.filter(p => p !== position)
+                ? prev.profileInterest.filter((p: string) => p !== position)
                 : [...prev.profileInterest, position]
         }));
     };
 
+
     const handleAttachClick = () => {
         fileInputRef.current?.click();
     };
+
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             setSelectedFile(event.target.files[0]);
         }
     };
+
 
     const handleRemoveFile = () => {
         setSelectedFile(null);
@@ -50,61 +53,90 @@ const CareersForm: React.FC = () => {
         }
     };
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (!GOOGLE_SCRIPT_URL) {
-            alert("Google Script URL not configured.");
-            return;
-        }
-
         setIsSubmitting(true);
         setSubmitStatus('idle');
-
         try {
-            const formDataToSend = new FormData();
+            let resumeUrl = null;
+            let resumeFilename = null;
 
-            // Text fields
-            formDataToSend.append("fullName", formData.fullName);
-            formDataToSend.append("email", formData.email);
-            formDataToSend.append("phone", formData.phone);
-            formDataToSend.append("qualification", formData.qualification);
-            formDataToSend.append("experience", formData.experience);
-            formDataToSend.append(
-                "profile",
-                formData.profileInterest.join(", ")
-            );
-            formDataToSend.append("interests", formData.interestAreas);
-
-            // File field (VERY IMPORTANT: name must be "resume")
+            // Step 1: Upload resume if selected
             if (selectedFile) {
-                formDataToSend.append("resume", selectedFile);
+                const fileExt = selectedFile.name.split('.').pop();
+
+                // Create filename using applicant's name and timestamp
+                const sanitizedName = formData.fullName
+                    .trim()  // Remove leading/trailing spaces
+                    .toLowerCase()
+                    .replace(/\s+/g, '_')  // Replace spaces with underscores
+                    .replace(/[^a-z0-9_]/gi, '');  // Remove special characters (case insensitive)
+
+                console.log('Full Name:', formData.fullName);
+                console.log('Sanitized Name:', sanitizedName);
+
+                // Create readable timestamp
+                const now = new Date();
+                const day = now.getDate();
+                const month = now.toLocaleString('en-US', { month: 'short' });
+                const year = now.getFullYear();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const timestamp = `${day}${month}${year}_${hours}${minutes}${seconds}`;
+
+                const fileName = `${sanitizedName}_${timestamp}.${fileExt}`;
+                console.log('Final Filename:', fileName);
+                const { error: uploadError } = await supabase.storage
+                    .from('Resumes')
+                    .upload(fileName, selectedFile, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+                if (uploadError) {
+                    throw new Error(`File upload failed: ${uploadError.message}`);
+                }
+                const { data: { publicUrl } } = supabase.storage
+                    .from('Resumes')
+                    .getPublicUrl(fileName);
+                resumeUrl = publicUrl;
+                resumeFilename = selectedFile.name;
             }
 
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                body: formDataToSend
+            // Step 2: Insert application data
+            const { error } = await supabase
+                .from('career_applications')
+                .insert([{
+                    full_name: formData.fullName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    qualification: formData.qualification,
+                    experience: parseInt(formData.experience),
+                    profile_interest: formData.profileInterest,
+                    interest_areas: formData.interestAreas || null,
+                    resume_url: resumeUrl,
+                    resume_filename: resumeFilename
+                }])
+                .select();
+            if (error) {
+                throw error;
+            }
+            setSubmitStatus("success");
+
+            // Reset form fields
+            setFormData({
+                fullName: '',
+                email: '',
+                phone: '',
+                qualification: '',
+                experience: '',
+                profileInterest: [],
+                interestAreas: ''
             });
 
-            // Apps Script returns JSON
-            const result = await response.json();
-
-            if (result.status === "success") {
-                setSubmitStatus("success");
-                setFormData({
-                    fullName: '',
-                    email: '',
-                    phone: '',
-                    qualification: '',
-                    experience: '',
-                    profileInterest: [],
-                    interestAreas: ''
-                });
-                handleRemoveFile();
-            } else {
-                throw new Error(result.message || "Submission failed");
-            }
-
+            // Remove uploaded file
+            handleRemoveFile();
         } catch (error) {
             console.error("Submission Error:", error);
             setSubmitStatus("error");
