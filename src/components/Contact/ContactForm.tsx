@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../../lib/supabaseClient';
 
 const ContactForm: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const ContactForm: React.FC = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({
             ...formData,
@@ -18,42 +20,39 @@ const ContactForm: React.FC = () => {
         });
     };
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        const APPS_SCRIPT_URL = import.meta.env.VITE_APPS_CONTACT_URL;
-
-        if (!APPS_SCRIPT_URL) {
-            alert("Google Script URL not configured.");
-            setIsSubmitting(false);
-            return;
-        }
-
         try {
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData)
-            });
+            const { error } = await supabase
+                .from('contact_submissions')
+                .insert([
+                    {
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone,
+                        query: formData.query,
+                        meeting_date: formData.meetingDate ? formData.meetingDate : null,
+                        meeting_time: formData.meetingTime ? formData.meetingTime : null,
+                    }
+                ])
+                .select();
 
-            const result = await response.json();
-
-            if (result.status === "success") {
-                alert("Thank you! Your message has been sent successfully.");
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    query: '',
-                    meetingDate: '',
-                    meetingTime: ''
-                });
-            } else {
-                throw new Error(result.message || "Submission failed");
+            if (error) {
+                throw error;
             }
+
+            alert("Thank you! Your message has been sent successfully.");
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                query: '',
+                meetingDate: '',
+                meetingTime: ''
+            });
 
         } catch (error) {
             console.error("Contact form error:", error);
