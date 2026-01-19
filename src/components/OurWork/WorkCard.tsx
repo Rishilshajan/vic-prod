@@ -47,8 +47,8 @@ const WorkCard: React.FC<WorkCardProps> = ({ service }) => {
                     ) : (
                         <ul className="flex flex-col gap-3 list-none">
                             {service.items?.map((item, index) => (
-                                <li key={index} className="flex items-start gap-2">
-                                    <span className="text-[15px] mt-1">•</span>
+                                <li key={index} className="flex items-baseline gap-2">
+                                    <span className="text-[15px]">•</span>
                                     <span className="font-light text-[15px] leading-tight">
                                         {item}
                                     </span>

@@ -236,7 +236,7 @@ const CareersForm: React.FC = () => {
                         {/* Profile Looking For - Checkboxes */}
                         <div className="relative">
                             <label className="block text-[#23A6F0] font-normal text-base mb-3 px-1">
-                                Profile looking for (Interest area of work) <span className="text-red-500">*</span>
+                                Profile looking for (Interest area of work)
                             </label>
                             <div className="space-y-2.5 px-1">
                                 {['Intern', 'Analyst', 'Associate', 'Researcher', 'Senior Researcher', 'Other'].map((position) => (

@@ -43,7 +43,7 @@ const AboutHero: React.FC = () => {
             <h1 className="font-semibold text-3xl md:text-[48px] leading-none mb-8 font-poppins">
               Who We Are
             </h1>
-            <p className="font-normal italic text-sm md:text-[16px] leading-relaxed max-w-[336px] text-white/90 font-poppins">
+            <p className="font-light text-sm md:text-lg lg:text-xl text-white italic drop-shadow-md max-w-[600px] leading-relaxed">
               We help organisations turn purpose into measurable progress, creating lasting impact across the sector
             </p>
           </div>

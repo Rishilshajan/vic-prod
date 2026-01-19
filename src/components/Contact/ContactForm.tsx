@@ -75,7 +75,7 @@ const ContactForm: React.FC = () => {
                     <input
                         type="text"
                         name="name"
-                        placeholder="Name *"
+                        placeholder="Name"
                         value={formData.name}
                         onChange={handleChange}
                         required
@@ -88,7 +88,7 @@ const ContactForm: React.FC = () => {
                     <input
                         type="email"
                         name="email"
-                        placeholder="Business Email *"
+                        placeholder="Business Email"
                         value={formData.email}
                         onChange={handleChange}
                         required
@@ -101,7 +101,7 @@ const ContactForm: React.FC = () => {
                     <input
                         type="tel"
                         name="phone"
-                        placeholder="Phone Number *"
+                        placeholder="Phone Number"
                         value={formData.phone}
                         onChange={handleChange}
                         required
@@ -114,7 +114,7 @@ const ContactForm: React.FC = () => {
                     <input
                         type="text"
                         name="query"
-                        placeholder="Query/Inquiry *"
+                        placeholder="Query/Inquiry"
                         value={formData.query}
                         onChange={handleChange}
                         required

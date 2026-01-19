@@ -22,7 +22,7 @@ const ResourcesHero: React.FC = () => {
                             Stories From The Field
                         </h1>
                         <p className="font-light text-base text-white italic drop-shadow-md max-w-[280px] leading-relaxed">
-                            Bringing ideas to life—together.
+                            Explore insights, and knowledge designed to strengthen impact.
                         </p>
                     </div>
                 </div>
@@ -47,7 +47,7 @@ const ResourcesHero: React.FC = () => {
                             Stories From The Field
                         </h1>
                         <p className="font-light text-base md:text-xl text-white italic drop-shadow-md">
-                            Bringing ideas to life—together.
+                            Explore insights, and knowledge designed to strengthen impact.
                         </p>
                     </div>
                 </div>

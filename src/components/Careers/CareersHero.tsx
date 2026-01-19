@@ -21,7 +21,7 @@ const CareersHero: React.FC = () => {
                             Careers at VIC
                         </h1>
                         <p className="font-light text-base text-white italic drop-shadow-md max-w-[280px] leading-relaxed">
-                            Bringing ideas to life—together.
+                            Join a purpose-driven team shaping meaningful change through impactful work.
                         </p>
                     </div>
                 </div>
@@ -52,8 +52,8 @@ const CareersHero: React.FC = () => {
                         <h1 className="font-bold text-3xl md:text-5xl lg:text-[64px] text-white mb-10 drop-shadow-md leading-tight">
                             Careers at VIC
                         </h1>
-                        <p className="font-light text-sm md:text-lg lg:text-xl text-white italic drop-shadow-md max-w-[800px] leading-relaxed">
-                            Bringing ideas to life—together.
+                        <p className="font-light text-sm md:text-lg lg:text-xl text-white italic drop-shadow-md max-w-[600px] leading-relaxed">
+                            Join a purpose-driven team shaping meaningful change through impactful work.
                         </p>
                     </div>
                 </div>

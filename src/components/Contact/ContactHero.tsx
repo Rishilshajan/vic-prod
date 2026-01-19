@@ -18,10 +18,10 @@ const ContactHero: React.FC = () => {
                     {/* Overlay Text Mobile */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-8">
                         <h1 className="font-bold text-3xl text-white mb-6 drop-shadow-md leading-tight">
-                            Let's Connect & Build Something Great!
+                            Let's Connect
                         </h1>
                         <p className="font-light text-base text-white italic drop-shadow-md max-w-[280px] leading-relaxed">
-                            Bringing ideas to life—together.
+                            Collaborate, innovate, and accelerate your impact journey.
                         </p>
                     </div>
                 </div>
@@ -41,10 +41,9 @@ const ContactHero: React.FC = () => {
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4 gap-6">
                         <h1 className="font-bold text-3xl md:text-4xl lg:text-5xl text-white drop-shadow-md leading-tight flex flex-col items-center gap-6">
                             <span>Let&rsquo;s Connect</span>
-                            <span><span className="text-[#6BC778]">&</span> Build Something Great!</span>
                         </h1>
-                        <p className="font-poppins font-small text-[14px] text-white italic drop-shadow-md leading-none tracking-normal">
-                            Bringing ideas to life—together.
+                        <p className="font-light text-sm md:text-lg lg:text-xl text-white italic drop-shadow-md max-w-[600px] leading-relaxed">
+                            Collaborate, innovate, and accelerate your impact journey.
                         </p>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ export const workServices: WorkService[] = [
             "Process Evaluation",
             "Outcome Evaluation",
             "Impact Evaluation (Baseline, Midline and Endline Studies)",
-            "Social Return on Investment"
+            "Social Return on Investment (SROI)"
         ],
         image: ImpactMeasurementImg
     },
