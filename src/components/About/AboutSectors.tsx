@@ -30,11 +30,11 @@ const AboutSectors: React.FC = () => {
                     ></div>
 
                     <div className="flex flex-col items-center justify-start h-full py-4 md:py-16 relative z-10 font-poppins text-white">
-                        <h2 className="font-medium text-[28px] md:text-[42px] leading-[120%] md:leading-[100%] mb-8 md:mb-[76px] text-center max-w-[597px] w-full">
+                        <h2 className="font-medium text-[28px] md:text-[42px] leading-[120%] md:leading-[100%] mb-4 md:mb-[30px] text-center max-w-[597px] w-full">
                             We Work Across The Sectors
                         </h2>
 
-                        <p className="font-light text-[14px] md:text-[24px] leading-relaxed md:leading-[140%] max-w-[1002px] w-full mx-auto mb-10 md:mb-[50px] text-justify md:text-center px-2 md:px-0">
+                        <p className="font-light text-[14px] md:text-[24px] leading-relaxed md:leading-[140%] max-w-[1002px] w-full mx-auto mb-10 md:mb-[50px] text-justify md:text-justify px-2 md:px-0">
                             We are committed to the UN SDG 2030 mission and continue to expand our impact footprint through our growing network of clients and partners across CSR, philanthropy, non-profits, social enterprises, government bodies and multilateral agencies, converting action into outcomes across development goals.
                         </p>
 

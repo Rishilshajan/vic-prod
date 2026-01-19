@@ -53,7 +53,7 @@ const ClientTestimonials: React.FC = () => {
                                     <div className="absolute inset-0 bg-gradient-to-l from-white via-white/60 to-transparent pointer-events-none z-10 rounded-[27px]" />
                                 )}
 
-                                <p className="text-[#23A6F0] text-base leading-relaxed font-normal text-center mb-6 relative z-20">
+                                <p className="text-[#23A6F0] text-base leading-relaxed font-normal text-left italic mb-6 relative z-20">
                                     "{testimonial.text}"
                                 </p>
 
@@ -92,7 +92,7 @@ const ClientTestimonials: React.FC = () => {
                     <div className="relative">
                         {/* Testimonial Content */}
                         <div className="flex flex-col justify-between min-h-[300px] transition-all duration-300">
-                            <p className="text-[#23A6F0] text-base leading-relaxed font-normal text-center mb-8">
+                            <p className="text-[#23A6F0] text-base leading-relaxed font-normal text-left italic mb-8">
                                 "{testimonials[activeIndex].text}"
                             </p>
 

@@ -7,7 +7,7 @@ const VisionMissionValues: React.FC = () => {
 
 
         {/* --- Vision Section --- */}
-        <div className="flex flex-col items-center gap-6 w-full">
+        <div className="flex flex-col items-center gap-2 w-full">
 
           <h2 className="font-semibold text-[32px] md:text-[42px] leading-none text-center text-[#123042] w-full max-w-[863px]">
             Vision
@@ -20,20 +20,20 @@ const VisionMissionValues: React.FC = () => {
 
 
         {/*  Mission Section  */}
-        <div className="flex flex-col items-center gap-6 w-full">
+        <div className="flex flex-col items-center gap-2 w-full">
           <h2 className="font-semibold text-[32px] md:text-[42px] leading-none text-center text-[#123042] w-full max-w-[863px]">
             Mission
           </h2>
           {/* Content */}
-          <p className="font-light text-[16px] md:text-[20px] leading-relaxed text-center text-[#1D6D29] w-full max-w-[580px]">
-            We partner with changemakers to deliver rigorous impact measurement and evaluations for creating lasting impact.
+          <p className="font-light text-[14px] md:text-[20px] leading-relaxed text-center text-[#1D6D29] w-full max-w-[800px]">
+            We partner with changemakers to deliver rigorous impact measurement and evaluations for creating lasting impact
           </p>
         </div>
 
 
         {/*  Core Values Section  */}
-        <div className="flex flex-col items-center gap-8 w-full">
-          <h2 className="font-semibold text-[32px] md:text-[42px] leading-none text-center text-[#123042] w-full max-w-[863px] mb-4">
+        <div className="flex flex-col items-center gap-4 w-full">
+          <h2 className="font-semibold text-[32px] md:text-[42px] leading-none text-center text-[#123042] w-full max-w-[863px]">
             Our Core Values
           </h2>
 

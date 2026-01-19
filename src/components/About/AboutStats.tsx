@@ -33,10 +33,6 @@ const AboutStats: React.FC = () => {
                         </div>
                     ))}
                 </div>
-
-                <p className="text-[#188028] font-light text-[20px] leading-none tracking-normal mx-auto w-full max-w-[732px] font-poppins">
-                    We have assessed over 40+ organisations with INR 150 Cr+ CSR fund value
-                </p>
             </div>
         </section>
     );
