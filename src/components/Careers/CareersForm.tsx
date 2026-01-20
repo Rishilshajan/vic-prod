@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Paperclip, X, Loader2 } from 'lucide-react';
-import { supabase } from '../../lib/supabaseClient';
+
+const SCRIPT_URL = import.meta.env.VITE_GOOGLE_CAREERS_URL;
 
 const CareersForm: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -41,7 +42,19 @@ const CareersForm: React.FC = () => {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            setSelectedFile(event.target.files[0]);
+            const file = event.target.files[0];
+            const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+
+            if (!allowedExtensions.exec(file.name)) {
+                alert('Please upload file having extensions .pdf, .doc or .docx only.');
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+                setSelectedFile(null);
+                return;
+            }
+
+            setSelectedFile(file);
         }
     };
 
@@ -53,75 +66,58 @@ const CareersForm: React.FC = () => {
         }
     };
 
+    // Helper to convert file to Base64
+    const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const result = reader.result as string;
+                // Remove the Data-URL declaration (e.g., "data:application/pdf;base64,")
+                const base64 = result.split(',')[1];
+                resolve(base64);
+            };
+            reader.onerror = error => reject(error);
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         setSubmitStatus('idle');
+
+        if (!SCRIPT_URL) {
+            alert("Google Script URL is missing in .env file (VITE_GOOGLE_CAREERS_URL)");
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
-            let resumeUrl = null;
-            let resumeFilename = null;
+            let resumeData = null;
 
-            // Step 1: Upload resume if selected
             if (selectedFile) {
-                const fileExt = selectedFile.name.split('.').pop();
-
-                // Create filename using applicant's name and timestamp
-                const sanitizedName = formData.fullName
-                    .trim()  // Remove leading/trailing spaces
-                    .toLowerCase()
-                    .replace(/\s+/g, '_')  // Replace spaces with underscores
-                    .replace(/[^a-z0-9_]/gi, '');  // Remove special characters (case insensitive)
-
-                console.log('Full Name:', formData.fullName);
-                console.log('Sanitized Name:', sanitizedName);
-
-                // Create readable timestamp
-                const now = new Date();
-                const day = now.getDate();
-                const month = now.toLocaleString('en-US', { month: 'short' });
-                const year = now.getFullYear();
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const seconds = String(now.getSeconds()).padStart(2, '0');
-                const timestamp = `${day}${month}${year}_${hours}${minutes}${seconds}`;
-
-                const fileName = `${sanitizedName}_${timestamp}.${fileExt}`;
-                console.log('Final Filename:', fileName);
-                const { error: uploadError } = await supabase.storage
-                    .from('Resumes')
-                    .upload(fileName, selectedFile, {
-                        cacheControl: '3600',
-                        upsert: false
-                    });
-                if (uploadError) {
-                    throw new Error(`File upload failed: ${uploadError.message}`);
-                }
-                const { data: { publicUrl } } = supabase.storage
-                    .from('Resumes')
-                    .getPublicUrl(fileName);
-                resumeUrl = publicUrl;
-                resumeFilename = selectedFile.name;
+                const base64Content = await fileToBase64(selectedFile);
+                resumeData = {
+                    name: selectedFile.name,
+                    mimeType: selectedFile.type,
+                    data: base64Content
+                };
             }
 
-            // Step 2: Insert application data
-            const { error } = await supabase
-                .from('career_applications')
-                .insert([{
-                    full_name: formData.fullName,
-                    email: formData.email,
-                    phone: formData.phone,
-                    qualification: formData.qualification,
-                    experience: parseInt(formData.experience),
-                    profile_interest: formData.profileInterest,
-                    interest_areas: formData.interestAreas || null,
-                    resume_url: resumeUrl,
-                    resume_filename: resumeFilename
-                }])
-                .select();
-            if (error) {
-                throw error;
-            }
+            const payload = {
+                type: 'career', // Important flag for the script
+                ...formData,
+                resume: resumeData
+            };
+
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8",
+                },
+            });
+
             setSubmitStatus("success");
 
             // Reset form fields

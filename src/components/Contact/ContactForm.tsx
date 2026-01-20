@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+
+const SCRIPT_URL = import.meta.env.VITE_GOOGLE_CONTACT_URL;
 
 const ContactForm: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -25,25 +26,24 @@ const ContactForm: React.FC = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
+        if (SCRIPT_URL === "1tlA6NQVlgo3gaawYST_m3KxjApk0_EgsejzNZ0JJgTI") {
+            alert("Please configure the Google Script URL in the code!");
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
-            const { error } = await supabase
-                .from('contact_submissions')
-                .insert([
-                    {
-                        name: formData.name,
-                        email: formData.email,
-                        phone: formData.phone,
-                        query: formData.query,
-                        meeting_date: formData.meetingDate ? formData.meetingDate : null,
-                        meeting_time: formData.meetingTime ? formData.meetingTime : null,
-                    }
-                ])
-                .select();
+            // We use 'no-cors' mode or text/plain to avoid preflight OPTIONS request which Apps Script doesn't handle
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                // Using text/plain prevents the browser from sending a preflight OPTIONS request
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8",
+                },
+            });
 
-            if (error) {
-                throw error;
-            }
-
+            // Since we might be using no-cors or opaque responses, we assume success if no network error occurred.
             alert("Thank you! Your message has been sent successfully.");
             setFormData({
                 name: '',
