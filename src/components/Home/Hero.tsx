@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 import heroWaveImg from '../../assets/hero_image_update.png';
 import heroWaveMobileImg from '../../assets/hero_wave_mobile.png';
 
+//Hero
 const Hero: React.FC = () => {
   return (
     <section className="w-full relative bg-white flex flex-col items-center overflow-hidden">
