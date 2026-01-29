@@ -1,0 +1,159 @@
+import { supabase } from './supabaseClient';
+import type { ResourceData } from '../types/admin';
+
+export interface ResourceDB extends ResourceData {
+    id: string;
+    created_at: string;
+    updated_at: string;
+    status: 'draft' | 'published';
+}
+
+// Helper: Map DB row to Frontend Data
+const mapFromDB = (row: any): ResourceDB => ({
+    ...row,
+    coverImage: row.cover_image,
+    coverPosition: row.cover_position,
+});
+
+// Helper: Map Frontend Data to DB Payload
+const mapToDB = (data: ResourceData, status: 'draft' | 'published') => ({
+    title: data.title,
+    author: data.author,
+    date: data.date,
+    excerpt: data.excerpt,
+    content: data.content,
+    category: data.category,
+    tags: data.tags,
+    cover_image: data.coverImage,
+    cover_position: data.coverPosition,
+    status,
+    updated_at: new Date().toISOString(),
+});
+
+export const saveResource = async (data: ResourceData, status: 'draft' | 'published', id?: string) => {
+    const payload = mapToDB(data, status);
+
+    if (id) {
+        // Update existing
+        const { data: result, error } = await supabase
+            .from('resources')
+            .update(payload)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return mapFromDB(result);
+    } else {
+        // Insert new
+        const { data: result, error } = await supabase
+            .from('resources')
+            .insert([payload])
+            .select()
+            .single();
+
+        if (error) throw error;
+        return mapFromDB(result);
+    }
+};
+
+export const getResource = async (id: string) => {
+    const { data, error } = await supabase
+        .from('resources')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) throw error;
+    return mapFromDB(data);
+};
+
+// Lightweight fetch for lists (excludes heavy content/images)
+export const getDraftsList = async () => {
+    const { data, error } = await supabase
+        .from('resources')
+        .select('id, title, author, date, status, updated_at, excerpt') // Explicitly select columns, exclude content/cover_image
+        .eq('status', 'draft')
+        .order('updated_at', { ascending: false });
+
+    if (error) throw error;
+    // No mapping needed for list view as we don't access mapped fields
+    return data;
+};
+
+export const getPublishedList = async () => {
+    const { data, error } = await supabase
+        .from('resources')
+        .select('id, title, author, date, status, updated_at, excerpt')
+        .eq('status', 'published')
+        .order('date', { ascending: false });
+
+    if (error) throw error;
+    return data;
+};
+
+// Full fetch for editing (backward compatibility)
+export const getDrafts = async () => {
+    return getDraftsList(); // redirect to list for now, or keep full if needed elsewhere. 
+    // Actually, let's keep getDrafts as full fetch if used, but we will replace usages.
+    // To be safe, let's make getDrafts/getPublishedResources alias to the List versions for the dashboard, 
+    // unless specifically asked for full data (which is only done by getResource(id)).
+
+    // Changing behavior: getDrafts and getPublishedResources now return LIGHTWEIGHT data.
+    // This assumes no consumer needs the full content for a list.
+    const { data, error } = await supabase
+        .from('resources')
+        .select('id, title, author, date, status, updated_at, excerpt')
+        .eq('status', 'draft')
+        .order('updated_at', { ascending: false });
+
+    if (error) throw error;
+    return data?.map(mapFromDB) || [];
+};
+
+export const getPublishedResources = async () => {
+    const { data, error } = await supabase
+        .from('resources')
+        .select('id, title, author, date, status, updated_at, excerpt')
+        .eq('status', 'published')
+        .order('date', { ascending: false });
+
+    if (error) throw error;
+    return data?.map(mapFromDB) || [];
+};
+
+export const deleteResource = async (id: string) => {
+    const { error } = await supabase
+        .from('resources')
+        .delete()
+        .eq('id', id);
+
+    if (error) throw error;
+};
+// Helper to get stats for dashboard
+export const getStats = async () => {
+    // We can do this with two count queries or one select.
+    // Given the dashboard needs counts, separate count queries are cleaner.
+
+    // Get Published Count
+    const { count: publishedCount, error: pubError } = await supabase
+        .from('resources')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'published');
+
+    if (pubError) throw pubError;
+
+    // Get Draft Count
+    const { count: draftCount, error: draftError } = await supabase
+        .from('resources')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'draft');
+
+    if (draftError) throw draftError;
+
+    return {
+        total: (publishedCount || 0) + (draftCount || 0),
+        published: publishedCount || 0,
+        drafts: draftCount || 0
+    };
+};

@@ -12,6 +12,10 @@ import OurWorkDetail from '../pages/OurWorkDetail';
 import ResourceDetail from '../pages/ResourceDetail';
 import ResourceDetailECCE from '../pages/ResourceDetailECCE';
 import ResourceDetailIFC from '../pages/ResourceDetailIFC';
+import AdminLogin from '../pages/AdminLogin';
+import EmailVerification from '../pages/EmailVerification';
+import AdminDashboard from '../pages/AdminDashboard';
+import CreateResource from '../pages/CreateResource';
 import PageTransition from './PageTransition';
 
 const AnimatedRoutes: React.FC = () => {
@@ -31,6 +35,10 @@ const AnimatedRoutes: React.FC = () => {
                 <Route path="/resource-detail" element={<PageTransition><ResourceDetail /></PageTransition>} />
                 <Route path="/resource-detail-ifc" element={<PageTransition><ResourceDetailIFC /></PageTransition>} />
                 <Route path="/resource-detail-ecce" element={<PageTransition><ResourceDetailECCE /></PageTransition>} />
+                <Route path="/admin" element={<AdminLogin />} />
+                <Route path="/admin/verify" element={<PageTransition><EmailVerification /></PageTransition>} />
+                <Route path="/admin/dashboard" element={<PageTransition><AdminDashboard /></PageTransition>} />
+                <Route path="/admin/resources/new" element={<PageTransition><CreateResource /></PageTransition>} />
             </Routes>
         </AnimatePresence>
     );
