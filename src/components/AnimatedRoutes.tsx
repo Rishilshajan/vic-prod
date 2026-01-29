@@ -18,6 +18,8 @@ import AdminDashboard from '../pages/AdminDashboard';
 import CreateResource from '../pages/CreateResource';
 import PageTransition from './PageTransition';
 
+import ProtectedRoute from './admin/ProtectedRoute';
+
 const AnimatedRoutes: React.FC = () => {
     const location = useLocation();
 
@@ -37,8 +39,26 @@ const AnimatedRoutes: React.FC = () => {
                 <Route path="/resource-detail-ecce" element={<PageTransition><ResourceDetailECCE /></PageTransition>} />
                 <Route path="/admin" element={<AdminLogin />} />
                 <Route path="/admin/verify" element={<PageTransition><EmailVerification /></PageTransition>} />
-                <Route path="/admin/dashboard" element={<PageTransition><AdminDashboard /></PageTransition>} />
-                <Route path="/admin/resources/new" element={<PageTransition><CreateResource /></PageTransition>} />
+                <Route
+                    path="/admin/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <PageTransition>
+                                <AdminDashboard />
+                            </PageTransition>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/resources/new"
+                    element={
+                        <ProtectedRoute>
+                            <PageTransition>
+                                <CreateResource />
+                            </PageTransition>
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </AnimatePresence>
     );

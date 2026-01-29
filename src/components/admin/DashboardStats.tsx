@@ -7,9 +7,9 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ label, value, valueColor = "text-[#123042]" }) => (
-    <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-        <p className="text-sm text-slate-500 font-medium">{label}</p>
-        <p className={`text-3xl font-bold mt-2 ${valueColor}`}>{value}</p>
+    <div className="bg-white p-4 sm:p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex flex-row items-center justify-between sm:flex-col sm:items-start sm:justify-start">
+        <p className="text-base sm:text-sm text-slate-500 font-medium">{label}</p>
+        <p className={`text-3xl font-bold translate-x-1.0 sm:translate-x-0 sm:mt-2 ${valueColor}`}>{value}</p>
     </div>
 );
 

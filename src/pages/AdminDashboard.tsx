@@ -55,8 +55,7 @@ const AdminDashboard: React.FC = () => {
                 {/* Top Header (Mobile Toggle) */}
                 <header className="bg-white border-b border-slate-200 lg:hidden p-4 flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                        <img src={vicLogo} alt="VIC CMS" className="w-8 h-8 object-contain" />
-                        <span className="text-lg font-bold text-[#123042]">VIC CMS</span>
+                        <img src={vicLogo} alt="VIC CMS" className="h-14 w-auto object-contain" />
                     </div>
                     <button onClick={toggleSidebar} className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
                         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
