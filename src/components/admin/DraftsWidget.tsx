@@ -40,7 +40,7 @@ const DraftCard: React.FC<DraftCardProps> = ({ id, title, date, author }) => {
 };
 
 const DraftsWidget: React.FC = () => {
-    const [drafts, setDrafts] = useState<ResourceDB[]>([]);
+    const [drafts, setDrafts] = useState<Partial<ResourceDB>[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -67,10 +67,10 @@ const DraftsWidget: React.FC = () => {
                 {drafts.map(draft => (
                     <DraftCard
                         key={draft.id}
-                        id={draft.id}
-                        title={draft.title}
-                        date={draft.updated_at || draft.created_at}
-                        author={draft.author}
+                        id={draft.id || ''}
+                        title={draft.title || 'Untitled'}
+                        date={draft.updated_at || draft.created_at || new Date().toISOString()}
+                        author={draft.author || 'Unknown Author'}
                     />
                 ))}
             </div>

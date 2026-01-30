@@ -9,6 +9,7 @@ interface ResourcePreviewModalProps {
 }
 
 const ResourcePreviewModal: React.FC<ResourcePreviewModalProps> = ({ isOpen, onClose, data }) => {
+
     // Prevent body scroll when modal is open
     useEffect(() => {
         if (isOpen) {
@@ -26,6 +27,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewModalProps> = ({ isOpen, onC
 
     return (
         <div className="fixed inset-0 z-[100] bg-white overflow-y-auto animate-in fade-in duration-200">
+
             {/* Admin Overlay Header */}
             <div className="sticky top-0 z-50 bg-[#123042] text-white px-4 py-3 flex justify-between items-center shadow-md">
                 <div className="flex items-center gap-2">
@@ -86,6 +88,7 @@ const ResourcePreviewModal: React.FC<ResourcePreviewModalProps> = ({ isOpen, onC
 
                             {/* Text Content Right */}
                             <div className="flex-1 p-8 md:p-12 flex flex-col justify-center">
+
                                 {/* Author | Date */}
                                 <div className="flex items-center gap-2 mb-4 text-[14px] font-medium text-[#0C87BE]">
                                     <span>{data.author || 'Author Name'}</span>

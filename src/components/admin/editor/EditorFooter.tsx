@@ -22,7 +22,7 @@ const EditorFooter: React.FC<EditorFooterProps> = ({ onPreview, onSaveDraft, onP
                     </div>
                 </div>
 
-                {/* Mobile Status Dot (Simple) */}
+                {/* Mobile Status Dot */}
                 <div className="sm:hidden flex items-center">
                     <span className={`w-2.5 h-2.5 rounded-full ${isSaving ? 'bg-blue-500 animate-pulse' : 'bg-amber-500'}`} title={isSaving ? "Saving..." : "Unsaved Changes"}></span>
                 </div>

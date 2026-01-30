@@ -42,6 +42,7 @@ const CreateResource: React.FC = () => {
             let finalCoverImage = data.coverImage;
 
             if (data.coverImage && data.coverImage.startsWith('data:image')) {
+
                 // It's a base64 string, we need to upload it
                 const fileExt = data.coverImage.substring(data.coverImage.indexOf('/') + 1, data.coverImage.indexOf(';'));
                 const fileName = `${Date.now()}_cover.${fileExt}`;
@@ -80,8 +81,10 @@ const CreateResource: React.FC = () => {
 
             // 4. Update State to reflect new Data (especially if it was a new insert, we need the ID)
             if (savedResource && savedResource.id) {
+
                 // Update local state to avoid re-uploading the same image (it's now a URL)
                 setData(savedResource);
+
                 // Update URL without reload if it was new
                 if (!resourceId) {
                     navigate(`?id=${savedResource.id}`, { replace: true });
@@ -169,6 +172,7 @@ const CreateResource: React.FC = () => {
                     <EditorHeader />
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
                         {/* Top Row: General Info + Cover Image */}
                         <div className="lg:col-span-2 space-y-6">
                             <GeneralInfo data={data} onChange={updateField} />

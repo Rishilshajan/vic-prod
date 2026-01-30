@@ -60,11 +60,6 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
         const sensitivity = 0.5;
 
         // Calculate new percentages
-        // Invert delta because dragging image left means showing right side (actually, object-position moves the window over the image)
-        // If object-fit is cover, object-position: 0% shows left edge. 100% shows right edge.
-        // Dragging mouse LEFT (negative delta) should visually pull the image LEFT? 
-        // No, usually "Dragging the image" means if I pull image RIGHT, I want to see the LEFT part.
-        // But standard object-position: moving +% moves the viewing window to the right.
 
         let newX = funcX - (deltaX * sensitivity);
         let newY = funcY - (deltaY * sensitivity);
@@ -106,6 +101,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
 
                     {coverImage ? (
                         <div className="space-y-3">
+
                             {/* Preview Area */}
                             <div
                                 ref={containerRef}

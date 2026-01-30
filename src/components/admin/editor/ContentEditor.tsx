@@ -14,7 +14,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, onChange }) => {
     const [activeFormats, setActiveFormats] = useState<Record<string, boolean>>({});
     const [isUploading, setIsUploading] = useState(false);
 
-    // Sync content changes from parent ONLY strictly needed (e.g. clear)
+
     // Sync content changes from parent
     useEffect(() => {
         if (editorRef.current && content !== editorRef.current.innerHTML) {
@@ -61,6 +61,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, onChange }) => {
     };
 
     const uploadFile = async (file: File, folder: 'images' | 'videos'): Promise<string | null> => {
+
         // File Size Restrictions
         const MB = 1024 * 1024;
         const limit = folder === 'images' ? 5 * MB : 50 * MB;
@@ -125,6 +126,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, onChange }) => {
     };
 
     const insertVideo = () => {
+
         // Offer choice: Upload or URL
         const choice = prompt("Type '1' to Upload Video, '2' for YouTube/URL");
         if (choice === '1') {

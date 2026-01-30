@@ -30,6 +30,7 @@ const ResourcesHero: React.FC = () => {
 
             {/* Desktop Layout */}
             <div className="hidden md:block relative w-full max-w-[1246px]">
+
                 {/* Image Container */}
                 <div className="w-full relative z-0">
                     <img

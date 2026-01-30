@@ -31,7 +31,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
     const handleLogout = async () => {
         if (window.confirm("Are you sure you want to log out?")) {
             await supabase.auth.signOut();
-            navigate('/'); // Redirect to home or login
+            navigate('/');
         }
     };
 
@@ -47,6 +47,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 <div className="bg-white rounded-[16px] py-4 px-2 flex justify-center items-center shadow-lg">
                     <img src={vicLogo} alt="VIC CMS" className="h-12 w-auto object-contain" />
                 </div>
+
                 {/* Mobile Close Button */}
                 {isOverlay && (
                     <button

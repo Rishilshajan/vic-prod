@@ -30,6 +30,9 @@ const mapToDB = (data: ResourceData, status: 'draft' | 'published') => ({
     updated_at: new Date().toISOString(),
 });
 
+// Cache for full resource details
+const resourceCache = new Map<string, ResourceDB>();
+
 export const saveResource = async (data: ResourceData, status: 'draft' | 'published', id?: string) => {
     const payload = mapToDB(data, status);
 
@@ -58,6 +61,11 @@ export const saveResource = async (data: ResourceData, status: 'draft' | 'publis
 };
 
 export const getResource = async (id: string) => {
+    // Check cache first
+    if (resourceCache.has(id)) {
+        return resourceCache.get(id)!;
+    }
+
     const { data, error } = await supabase
         .from('resources')
         .select('*')
@@ -65,7 +73,9 @@ export const getResource = async (id: string) => {
         .single();
 
     if (error) throw error;
-    return mapFromDB(data);
+    const mapped = mapFromDB(data);
+    resourceCache.set(id, mapped);
+    return mapped;
 };
 
 // Lightweight fetch for lists (excludes heavy content/images)
@@ -114,12 +124,32 @@ export const getDrafts = async () => {
 export const getPublishedResources = async () => {
     const { data, error } = await supabase
         .from('resources')
-        .select('id, title, author, date, status, updated_at, excerpt')
+        .select('id, title, author, date, status, updated_at, excerpt, cover_image') // EXPLICITLY NO 'content'
         .eq('status', 'published')
-        .order('date', { ascending: false });
+        .order('date', { ascending: false })
+        .limit(20); // Reduced limit further to speed up rendering if images are heavy
 
     if (error) throw error;
     return data?.map(mapFromDB) || [];
+};
+
+export const prefetchResources = async (ids: string[]) => {
+    const neededIds = ids.filter(id => !resourceCache.has(id));
+    if (neededIds.length === 0) return;
+
+    const { data, error } = await supabase
+        .from('resources')
+        .select('*')
+        .in('id', neededIds);
+
+    if (error) {
+        console.error("Error prefetching resources:", error);
+        return;
+    }
+
+    data?.forEach(row => {
+        resourceCache.set(row.id, mapFromDB(row));
+    });
 };
 
 export const deleteResource = async (id: string) => {

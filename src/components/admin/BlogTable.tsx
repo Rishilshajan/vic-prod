@@ -1,8 +1,8 @@
 import React from 'react';
 import { Edit2, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
-
 import { useNavigate } from 'react-router-dom';
 import { getDrafts, getPublishedResources, deleteResource, type ResourceDB } from '../../lib/resources';
+
 
 const TableRow = ({ id, title, excerpt, author, date, status, statusColor, onView, onDelete }: any) => (
     <tr className="hover:bg-slate-50 transition-colors group cursor-pointer" onClick={() => onView(id)}>
@@ -53,6 +53,7 @@ interface BlogTableProps {
 
 const BlogTable: React.FC<BlogTableProps> = ({ view }) => {
     const navigate = useNavigate();
+
     // Use Partial<ResourceDB> because list views fetch a lightweight subset of data
     const [resources, setResources] = React.useState<Partial<ResourceDB>[]>([]);
     const [loading, setLoading] = React.useState(true);
@@ -153,7 +154,7 @@ const BlogTable: React.FC<BlogTableProps> = ({ view }) => {
                             <ChevronLeft size={16} />
                         </button>
 
-                        {/* Simple Logic: Show all pages for now as list is small, or just current */}
+                        {/* Show all pages for now as list is small, or just current */}
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                             <button
                                 key={page}

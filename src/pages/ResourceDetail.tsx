@@ -1,16 +1,58 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { resourceDetailData } from '../data/resourceDetailData';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getResource, type ResourceDB } from '../lib/resources';
+import { formatDate } from '../lib/utils';
 
 const ResourceDetail: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const [resource, setResource] = useState<ResourceDB | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+
+    const fetchResource = async () => {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        const data = await getResource(id);
+        setResource(data);
+      } catch (error) {
+        console.error("Error fetching resource:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResource();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#123042]"></div>
+      </div>
+    );
+  }
+
+  if (!resource) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <h2 className="text-2xl font-bold text-slate-700">Resource not found</h2>
+        <button onClick={() => navigate('/resources')} className="mt-4 text-[#0C87BE] hover:underline">
+          Back to Resources
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-white font-poppins text-[#123042] pb-24">
+
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-8 flex justify-center">
         <div className="hidden md:block w-full max-w-[1190px]">
@@ -35,11 +77,6 @@ const ResourceDetail: React.FC = () => {
 
       {/* Hero Card Container */}
       <div className="container mx-auto px-4 mt-2 mb-20 md:mb-28 flex justify-center">
-        {/* 
-                    Gradient Border Layout:
-                    Outer div acts as the border (p-[3px]) with gradient background.
-                    Inner div is the white card.
-                */}
         <div
           className="relative w-full max-w-[1247px] rounded-[30px] p-[3px]"
           style={{
@@ -51,8 +88,8 @@ const ResourceDetail: React.FC = () => {
             {/* Image Left */}
             <div className="w-full md:w-[480px] lg:w-[500px] h-[300px] md:h-auto relative shrink-0">
               <img
-                src={resourceDetailData.image}
-                alt={resourceDetailData.title}
+                src={resource.coverImage || 'https://placehold.co/800x600?text=No+Image'}
+                alt={resource.title}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -62,14 +99,14 @@ const ResourceDetail: React.FC = () => {
 
               {/* Author | Date */}
               <div className="flex items-center gap-2 mb-4 text-[14px] font-medium text-[#0C87BE]">
-                <span>{resourceDetailData.author}</span>
+                <span>{resource.author}</span>
                 <span>|</span>
-                <span>{resourceDetailData.date}</span>
+                <span>{formatDate(resource.date)}</span>
               </div>
 
               {/* Title */}
               <h1 className="text-[28px] md:text-[36px] lg:text-[40px] font-semibold text-[#123042] leading-tight">
-                {resourceDetailData.title}
+                {resource.title}
               </h1>
             </div>
           </div>
@@ -78,19 +115,11 @@ const ResourceDetail: React.FC = () => {
 
 
       {/* Content Sections */}
-      <div className="container mx-auto px-8 md:px-4 max-w-[841px] space-y-[45px]">
-
-        {resourceDetailData.sections.map((section, index) => (
-          <div key={index}>
-            <h2 className="font-poppins font-semibold text-[#123042] text-[28px] md:text-[42px] leading-[100%] mb-8">
-              {section.heading}
-            </h2>
-            <p className="font-poppins font-light text-[#123042] text-[16px] leading-relaxed text-left whitespace-pre-line">
-              {section.content}
-            </p>
-          </div>
-        ))}
-
+      <div className="container mx-auto px-8 md:px-4 max-w-[841px] pb-20">
+        <div
+          className="prose prose-lg prose-slate max-w-none font-poppins font-light text-[#123042] text-[16px] leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: resource.content }}
+        />
       </div>
 
     </div>

@@ -26,6 +26,7 @@ const EditorHeader: React.FC = () => {
                 </nav>
                 <h2 className="text-3xl font-bold text-[#123042] tracking-tight">Create Blog Resource</h2>
             </div>
+
             {/* Mobile Actions - Visible only on small screens */}
 
         </div>

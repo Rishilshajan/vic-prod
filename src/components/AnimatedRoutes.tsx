@@ -9,14 +9,12 @@ import OurWork from '../pages/OurWork';
 import Careers from '../pages/Careers';
 import TeamMemberDetail from '../pages/TeamMemberDetail';
 import OurWorkDetail from '../pages/OurWorkDetail';
-import ResourceDetail from '../pages/ResourceDetail';
-import ResourceDetailECCE from '../pages/ResourceDetailECCE';
-import ResourceDetailIFC from '../pages/ResourceDetailIFC';
 import AdminLogin from '../pages/AdminLogin';
 import EmailVerification from '../pages/EmailVerification';
 import AdminDashboard from '../pages/AdminDashboard';
 import CreateResource from '../pages/CreateResource';
 import PageTransition from './PageTransition';
+import ResourceDetail from '../pages/ResourceDetail';
 
 import ProtectedRoute from './admin/ProtectedRoute';
 
@@ -34,9 +32,7 @@ const AnimatedRoutes: React.FC = () => {
                 <Route path="/careers" element={<PageTransition><Careers /></PageTransition>} />
                 <Route path="/about-us/team/:id" element={<PageTransition><TeamMemberDetail /></PageTransition>} />
                 <Route path="/our-work/:id" element={<PageTransition><OurWorkDetail /></PageTransition>} />
-                <Route path="/resource-detail" element={<PageTransition><ResourceDetail /></PageTransition>} />
-                <Route path="/resource-detail-ifc" element={<PageTransition><ResourceDetailIFC /></PageTransition>} />
-                <Route path="/resource-detail-ecce" element={<PageTransition><ResourceDetailECCE /></PageTransition>} />
+                <Route path="/resources/:id" element={<PageTransition><ResourceDetail /></PageTransition>} />
                 <Route path="/admin" element={<AdminLogin />} />
                 <Route path="/admin/verify" element={<PageTransition><EmailVerification /></PageTransition>} />
                 <Route
