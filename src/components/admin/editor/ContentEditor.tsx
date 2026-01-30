@@ -161,7 +161,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, onChange }) => {
         title,
         label
     }: {
-        icon?: any,
+        icon?: React.ElementType,
         isActive?: boolean,
         onClick: () => void,
         title: string,

@@ -8,12 +8,50 @@ export interface ResourceDB extends ResourceData {
     status: 'draft' | 'published';
 }
 
+interface ResourceRow {
+    id: string;
+    created_at: string;
+    updated_at: string;
+    status: 'draft' | 'published';
+    title: string;
+    author: string;
+    date: string;
+    excerpt: string;
+    content: string;
+    category: string;
+    tags: string[];
+    cover_image: string;
+    cover_position: string;
+}
+
 // Helper: Map DB row to Frontend Data
-const mapFromDB = (row: any): ResourceDB => ({
-    ...row,
-    coverImage: row.cover_image,
-    coverPosition: row.cover_position,
-});
+const mapFromDB = (row: Partial<ResourceRow>): ResourceDB => {
+    // Handle tags: DB has string[], Frontend wants string (comma separated)
+    // If DB has tags as string (legacy), handle that too
+    let tags = '';
+    if (Array.isArray(row.tags)) {
+        tags = row.tags.join(', ');
+    } else if (typeof row.tags === 'string') {
+        tags = row.tags;
+    }
+
+    return {
+        title: row.title || '',
+        author: row.author || '',
+        date: row.date || '',
+        excerpt: row.excerpt || '',
+        content: row.content || '',
+        category: row.category || '',
+        tags: tags,
+        coverImage: row.cover_image || null,
+        coverPosition: row.cover_position || '50% 50%',
+        // ResourceDB specific
+        id: row.id!,
+        created_at: row.created_at!,
+        updated_at: row.updated_at!,
+        status: row.status as 'draft' | 'published' || 'draft',
+    };
+};
 
 // Helper: Map Frontend Data to DB Payload
 const mapToDB = (data: ResourceData, status: 'draft' | 'published') => ({
@@ -23,7 +61,7 @@ const mapToDB = (data: ResourceData, status: 'draft' | 'published') => ({
     excerpt: data.excerpt,
     content: data.content,
     category: data.category,
-    tags: data.tags,
+    tags: data.tags ? data.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
     cover_image: data.coverImage,
     cover_position: data.coverPosition,
     status,

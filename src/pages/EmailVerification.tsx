@@ -27,11 +27,19 @@ const EmailVerification: React.FC = () => {
 
             setShowToast(true);
             setTimeout(() => setShowToast(false), 3000);
-        } catch (error: any) {
-            if (error.status === 429 || error.message?.includes('429')) {
+        } catch (error: unknown) {
+            let errorMessage = "Failed to resend link.";
+            let errorStatus: number | undefined;
+
+            if (typeof error === 'object' && error !== null) {
+                if ('message' in error) errorMessage = String((error as { message: unknown }).message);
+                if ('status' in error) errorStatus = Number((error as { status: unknown }).status);
+            }
+
+            if (errorStatus === 429 || errorMessage?.includes('429')) {
                 alert('Please wait 60 seconds before requesting a new link.');
             } else {
-                alert(error.message || "Failed to resend link.");
+                alert(errorMessage);
             }
         } finally {
             setIsResending(false);

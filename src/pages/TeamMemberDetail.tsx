@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { teamMembers, type TeamMember } from '../data/teamData';
+import { teamMembers } from '../data/teamData';
 import BranchImg from '../assets/Branch.png';
 
 // Social Icon Components
@@ -31,17 +31,10 @@ const LinkedInIcon = () => (
 
 const TeamMemberDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [member, setMember] = useState<TeamMember | null>(null);
-
-    useEffect(() => {
-        const found = teamMembers.find(m => m.id === id);
-        if (found) {
-            setMember(found);
-        }
-    }, [id]);
+    const member = teamMembers.find(m => m.id === id);
 
     if (!member) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+        return <div className="min-h-screen flex items-center justify-center">Member not found</div>;
     }
 
     return (

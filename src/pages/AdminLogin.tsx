@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import vicLogo from '../assets/VICLOGO.png';
 import { supabase } from '../lib/supabaseClient';
 
 const AdminLogin: React.FC = () => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,47 +21,67 @@ const AdminLogin: React.FC = () => {
         }
     }, []);
 
+    const showToastError = (message: string) => {
+        setToastMessage(message);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+    };
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // 1. Strict Domain Validation
+        const normalizedEmail = email.toLowerCase().trim();
+
+        // Regex to match strictly @vic.org.in or @*.vic.org.in
+        // Matches: user@vic.org.in, user@admin.vic.org.in
+        // Rejects: user@gmail.com, user@fakevic.org.in
+        const vicDomainRegex = /@((\w+\.)*vic\.org\.in)$/;
+        const isValidDomain = vicDomainRegex.test(normalizedEmail);
+
+        if (!isValidDomain) {
+            showToastError(`Invalid email domain.`);
+            return;
+        }
+
         setIsLoading(true);
 
         try {
-            // 1. Verify Credentials (Password Login)
-            const { error: signInError } = await supabase.auth.signInWithPassword({
-                email,
-                password
+            // 2. Send Magic Link
+            const { error: otpError } = await supabase.auth.signInWithOtp({
+                email: normalizedEmail,
+                options: {
+                    emailRedirectTo: window.location.origin + '/admin/dashboard',
+                    shouldCreateUser: true,
+                }
             });
 
-            if (signInError) throw signInError;
+            if (otpError) throw otpError;
 
-            // 2. If successful, handle 'Remember Me'
+            // 3. Handle 'Remember Me'
             if (rememberMe) {
                 localStorage.setItem('adminEmail', email);
             } else {
                 localStorage.removeItem('adminEmail');
             }
 
-            // 3. Trigger Email Verification Link (Magic Link) for the 2nd step
-            const { error: otpError } = await supabase.auth.signInWithOtp({
-                email,
-                options: {
-                    emailRedirectTo: window.location.origin + '/admin/dashboard',
-                }
-            });
-
-            if (otpError) throw otpError;
-
             // 4. Navigate to verification screen
-            navigate('/admin/verify', { state: { email } });
+            navigate('/admin/verify', { state: { email: normalizedEmail } });
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Login error:', error);
-            if (error.status === 429 || error.message?.includes('429')) {
-                alert('Too many attempts. Please wait 60 seconds before trying again.');
-            } else if (error.message?.includes('Invalid login credentials')) {
-                alert('Invalid email or password. Please checking your credentials.');
+            let errorMessage = 'Authentication failed';
+            let errorStatus: number | undefined;
+
+            if (typeof error === 'object' && error !== null) {
+                if ('message' in error) errorMessage = String((error as { message: unknown }).message);
+                if ('status' in error) errorStatus = Number((error as { status: unknown }).status);
+            }
+
+            if (errorStatus === 429 || errorMessage?.includes('429')) {
+                showToastError('Too many attempts. Please wait 60s.');
             } else {
-                alert(error.message || 'Authentication failed');
+                showToastError(errorMessage);
             }
         } finally {
             setIsLoading(false);
@@ -81,12 +101,12 @@ const AdminLogin: React.FC = () => {
                 transition={{ duration: 0.5 }}
                 className="w-full max-w-md px-6"
             >
-                {/* Login Card - White Background to match Contact/Careers */}
+                {/* Login Card */}
                 <div className="bg-white rounded-[30px] shadow-xl overflow-hidden border border-[#23A6F0]/30 p-8 sm:p-10">
                     <div className="flex flex-col items-center">
                         <div className="text-center mb-8">
                             <h1 className="text-2xl font-bold text-[#123042]">Admin CMS Login</h1>
-                            <p className="text-[#23A6F0]/80 mt-2">Manage your blog resources and content</p>
+                            <p className="text-[#23A6F0]/80 mt-2">Enter your organization email to continue</p>
                         </div>
                         <form action="#" className="space-y-6 w-full" method="POST" onSubmit={handleLogin}>
                             <div>
@@ -96,7 +116,6 @@ const AdminLogin: React.FC = () => {
                                         className="block w-full h-12 md:h-14 px-6 bg-white border border-[#23A6F0] rounded-xl focus:outline-none focus:ring-1 focus:ring-[#23A6F0] text-[#123042] placeholder-[#23A6F0] placeholder:italic placeholder:font-light transition-all shadow-sm pl-6"
                                         id="email"
                                         name="email"
-                                        placeholder="name@vic-thinktank.org"
                                         required
                                         type="email"
                                         value={email}
@@ -105,32 +124,7 @@ const AdminLogin: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <div className="flex justify-between items-center mb-2 px-1">
-                                    <label className="block text-sm font-semibold text-[#123042]" htmlFor="password">Password</label>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        className="block w-full h-12 md:h-14 px-6 bg-white border border-[#23A6F0] rounded-xl focus:outline-none focus:ring-1 focus:ring-[#23A6F0] text-[#123042] placeholder-[#23A6F0] placeholder:italic placeholder:font-light transition-all shadow-sm pl-6 pr-12"
-                                        id="password"
-                                        name="password"
-                                        placeholder="••••••••"
-                                        required
-                                        type={showPassword ? "text" : "password"}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        disabled={isLoading}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#23A6F0] hover:text-[#123042] transition-colors focus:outline-none"
-                                        aria-label={showPassword ? "Hide password" : "Show password"}
-                                    >
-                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                    </button>
-                                </div>
-                            </div>
+
                             <div className="flex items-center px-1">
                                 <input
                                     className="w-4 h-4 text-[#0077B6] border-[#23A6F0] rounded focus:ring-[#23A6F0]"
@@ -143,7 +137,7 @@ const AdminLogin: React.FC = () => {
                             </div>
                             <div className="pt-2">
                                 <button className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-[#0077B6] hover:bg-[#026aa1] transition-all active:scale-[0.98] shadow-lg shadow-[#0077B6]/20 disabled:opacity-70 disabled:cursor-not-allowed" type="submit" disabled={isLoading}>
-                                    {isLoading ? 'Signing In...' : 'Sign In'}
+                                    {isLoading ? 'Sending Link...' : 'Send Login Link'}
                                 </button>
                             </div>
                         </form>
@@ -161,6 +155,21 @@ const AdminLogin: React.FC = () => {
                     </p>
                 </div>
             </motion.div>
+
+            {/* Error Toast Notification */}
+            <AnimatePresence>
+                {showToast && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 50, x: "-50%" }}
+                        animate={{ opacity: 1, y: 0, x: "-50%" }}
+                        exit={{ opacity: 0, y: 20, x: "-50%" }}
+                        className="fixed bottom-10 left-1/2 bg-red-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 pointer-events-none z-50"
+                    >
+                        <AlertCircle className="text-white w-5 h-5" />
+                        <span className="text-sm font-medium">{toastMessage}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

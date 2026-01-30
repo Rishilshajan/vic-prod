@@ -4,7 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { getDrafts, getPublishedResources, deleteResource, type ResourceDB } from '../../lib/resources';
 
 
-const TableRow = ({ id, title, excerpt, author, date, status, statusColor, onView, onDelete }: any) => (
+interface TableRowProps {
+    id: string;
+    title: string;
+    excerpt: string;
+    author: string;
+    date: string;
+    status: string;
+    statusColor: string;
+    onView: (id: string) => void;
+    onDelete: (id: string) => void;
+}
+
+const TableRow: React.FC<TableRowProps> = ({ id, title, excerpt, author, date, status, statusColor, onView, onDelete }) => (
     <tr className="hover:bg-slate-50 transition-colors group cursor-pointer" onClick={() => onView(id)}>
         <td className="px-6 py-4 max-w-md">
             <div className="flex flex-col">
@@ -123,11 +135,11 @@ const BlogTable: React.FC<BlogTableProps> = ({ view }) => {
                             {currentItems.map((res) => (
                                 <TableRow
                                     key={res.id}
-                                    id={res.id}
+                                    id={res.id || ''}
                                     title={res.title || 'Untitled'}
-                                    excerpt={res.excerpt}
-                                    author={res.author}
-                                    date={res.date}
+                                    excerpt={res.excerpt || ''}
+                                    author={res.author || 'Unknown'}
+                                    date={res.date || ''}
                                     status={res.status === 'published' ? 'Published' : 'Draft'}
                                     statusColor={res.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}
                                     onView={handleView}

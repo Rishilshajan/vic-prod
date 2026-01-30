@@ -93,9 +93,10 @@ const CreateResource: React.FC = () => {
 
             alert(`Resource ${status === 'draft' ? 'saved as draft' : 'published'} successfully!`);
             if (status === 'published') navigate('/admin/dashboard');
-        } catch (error) {
-            console.error(error);
-            alert('Failed to save resource. Please try again.');
+        } catch (error: unknown) {
+            console.error('Error creating resource:', error);
+            const msg = error instanceof Error ? error.message : 'Unknown error';
+            alert(`Failed to create resource provided: ${msg}`);
         } finally {
             setIsSaving(false);
         }
@@ -114,7 +115,7 @@ const CreateResource: React.FC = () => {
         coverPosition: '50% 50%'
     });
 
-    const updateField = (field: keyof ResourceData, value: any) => {
+    const updateField = <K extends keyof ResourceData>(field: K, value: ResourceData[K]) => {
         setData(prev => ({ ...prev, [field]: value }));
     };
 
