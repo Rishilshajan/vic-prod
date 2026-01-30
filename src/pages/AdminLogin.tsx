@@ -37,9 +37,12 @@ const AdminLogin: React.FC = () => {
         // Matches: user@vic.org.in, user@admin.vic.org.in
         // Rejects: user@gmail.com, user@fakevic.org.in
         const vicDomainRegex = /@((\w+\.)*vic\.org\.in)$/;
-        const isValidDomain = vicDomainRegex.test(normalizedEmail);
+        const allowedEmail = import.meta.env.VITE_ALLOWED_EMAIL;
 
-        if (!isValidDomain) {
+        const isValidDomain = vicDomainRegex.test(normalizedEmail);
+        const isAllowedEmail = allowedEmail && normalizedEmail === allowedEmail.toLowerCase().trim();
+
+        if (!isValidDomain && !isAllowedEmail) {
             showToastError(`Invalid email domain.`);
             return;
         }
