@@ -16,48 +16,50 @@ interface TableRowProps {
     onDelete: (id: string) => void;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ id, title, excerpt, author, date, status, statusColor, onView, onDelete }) => (
-    <tr className="hover:bg-slate-50 transition-colors group cursor-pointer" onClick={() => onView(id)}>
-        <td className="px-6 py-4 max-w-md">
-            <div className="flex flex-col">
-                <span className="font-semibold text-[#123042] truncate">{title}</span>
-                <span className="text-xs text-slate-500 mt-1 line-clamp-1 group-hover:text-slate-700">{excerpt}</span>
-            </div>
-        </td>
-        <td className="px-6 py-4">
-            <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase">
-                    {(author?.trim() || 'U').charAt(0)}
+const TableRow: React.FC<TableRowProps> = ({ id, title, excerpt, author, date, status, statusColor, onView, onDelete }) => {
+    return (
+        <tr className="hover:bg-slate-50 transition-colors group cursor-pointer" onClick={() => onView(id)}>
+            <td className="px-6 py-4 max-w-md">
+                <div className="flex flex-col">
+                    <span className="font-semibold text-[#123042] truncate">{title}</span>
+                    <span className="text-xs text-slate-500 mt-1 line-clamp-1 group-hover:text-slate-700">{excerpt}</span>
                 </div>
-                <span className="text-sm text-slate-600">{author || 'Unknown'}</span>
-            </div>
-        </td>
-        <td className="px-6 py-4 text-sm text-slate-600 whitespace-nowrap">{date}</td>
-        <td className="px-6 py-4">
-            <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${statusColor}`}>
-                {status}
-            </span>
-        </td>
-        <td className="px-6 py-4 text-right whitespace-nowrap">
-            <div className="flex justify-end space-x-2">
-                <button
-                    onClick={(e) => { e.stopPropagation(); onView(id); }}
-                    className="p-2 text-blue-500 hover:text-blue-700 transition-colors"
-                    title="Edit"
-                >
-                    <Edit2 size={16} />
-                </button>
-                <button
-                    onClick={(e) => { e.stopPropagation(); onDelete(id); }}
-                    className="p-2 text-red-500 hover:text-red-700 transition-colors"
-                    title="Delete"
-                >
-                    <Trash2 size={16} />
-                </button>
-            </div>
-        </td>
-    </tr>
-);
+            </td>
+            <td className="px-6 py-4">
+                <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase">
+                        {(author?.trim() || 'U').charAt(0)}
+                    </div>
+                    <span className="text-sm text-slate-600">{author || 'Unknown'}</span>
+                </div>
+            </td>
+            <td className="px-6 py-4 text-sm text-slate-600 whitespace-nowrap">{date}</td>
+            <td className="px-6 py-4">
+                <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${statusColor}`}>
+                    {status}
+                </span>
+            </td>
+            <td className="px-6 py-4 text-right whitespace-nowrap">
+                <div className="flex justify-end space-x-2">
+                    <button
+                        onClick={(e) => { e.stopPropagation(); onView(id); }}
+                        className="p-2 text-blue-500 hover:text-blue-700 transition-colors"
+                        title="Edit"
+                    >
+                        <Edit2 size={16} />
+                    </button>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); onDelete(id); }}
+                        className="p-2 text-red-500 hover:text-red-700 transition-colors"
+                        title="Delete"
+                    >
+                        <Trash2 size={16} />
+                    </button>
+                </div>
+            </td>
+        </tr>
+    );
+};
 
 interface BlogTableProps {
     view: 'blog' | 'drafts';
@@ -100,6 +102,8 @@ const BlogTable: React.FC<BlogTableProps> = ({ view }) => {
     const handleView = (id: string) => {
         navigate(`/admin/resources/new?id=${id}`);
     };
+
+
 
     // Pagination Logic
     const indexOfLastItem = currentPage * itemsPerPage;

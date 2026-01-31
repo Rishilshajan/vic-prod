@@ -83,12 +83,8 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, onChange }) => {
 
             if (uploadError) {
                 console.error('Upload Error:', uploadError);
-                alert(`Upload failed: ${uploadError.message}. Using local preview instead.`);
-                return new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result as string);
-                    reader.readAsDataURL(file);
-                });
+                alert(`Upload failed: ${uploadError.message}. Please try again.`);
+                return null;
             }
 
             const { data } = supabase.storage.from('media').getPublicUrl(filePath);

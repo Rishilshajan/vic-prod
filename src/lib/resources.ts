@@ -18,38 +18,25 @@ interface ResourceRow {
     date: string;
     excerpt: string;
     content: string;
-    category: string;
-    tags: string[];
     cover_image: string;
     cover_position: string;
 }
 
 // Helper: Map DB row to Frontend Data
 const mapFromDB = (row: Partial<ResourceRow>): ResourceDB => {
-    // Handle tags: DB has string[], Frontend wants string (comma separated)
-    // If DB has tags as string (legacy), handle that too
-    let tags = '';
-    if (Array.isArray(row.tags)) {
-        tags = row.tags.join(', ');
-    } else if (typeof row.tags === 'string') {
-        tags = row.tags;
-    }
-
     return {
         title: row.title || '',
         author: row.author || '',
         date: row.date || '',
         excerpt: row.excerpt || '',
         content: row.content || '',
-        category: row.category || '',
-        tags: tags,
         coverImage: row.cover_image || null,
         coverPosition: row.cover_position || '50% 50%',
         // ResourceDB specific
         id: row.id!,
         created_at: row.created_at!,
         updated_at: row.updated_at!,
-        status: row.status as 'draft' | 'published' || 'draft',
+        status: row.status as 'draft' | 'published' || 'draft'
     };
 };
 
@@ -60,8 +47,6 @@ const mapToDB = (data: ResourceData, status: 'draft' | 'published') => ({
     date: data.date,
     excerpt: data.excerpt,
     content: data.content,
-    category: data.category,
-    tags: data.tags ? data.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
     cover_image: data.coverImage,
     cover_position: data.coverPosition,
     status,
@@ -134,7 +119,7 @@ export const getPublishedList = async () => {
         .from('resources')
         .select('id, title, author, date, status, updated_at, excerpt')
         .eq('status', 'published')
-        .order('date', { ascending: false });
+        .order('created_at', { ascending: true });
 
     if (error) throw error;
     return data;
@@ -164,7 +149,7 @@ export const getPublishedResources = async () => {
         .from('resources')
         .select('id, title, author, date, status, updated_at, excerpt, cover_image') // EXPLICITLY NO 'content'
         .eq('status', 'published')
-        .order('date', { ascending: false })
+        .order('created_at', { ascending: true })
         .limit(20); // Reduced limit further to speed up rendering if images are heavy
 
     if (error) throw error;
@@ -198,6 +183,8 @@ export const deleteResource = async (id: string) => {
 
     if (error) throw error;
 };
+
+
 // Helper to get stats for dashboard
 export const getStats = async () => {
     // We can do this with two count queries or one select.

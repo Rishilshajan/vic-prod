@@ -17,7 +17,7 @@ const Hero: React.FC = () => {
           <img
             src={heroWaveMobileImg}
             alt="Team Strategy"
-            className="absolute md:static left-[-27px] md:left-auto top-0 md:top-auto w-[437px] md:w-[1297px] h-[350px] md:h-[618.5px] max-w-none md:max-w-[95vw] object-cover md:object-contain rounded-[58px] md:rounded-none"
+            className="absolute md:static left-[-23px] md:left-auto top-0 md:top-auto w-[437px] md:w-[1297px] h-[350px] md:h-[618.5px] max-w-none md:max-w-[95vw] object-cover md:object-contain rounded-[58px] md:rounded-none"
           />
         </picture>
 

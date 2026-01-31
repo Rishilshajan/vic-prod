@@ -118,7 +118,13 @@ const ResourceDetail: React.FC = () => {
       <div className="container mx-auto px-8 md:px-4 max-w-[841px] pb-20">
         <div
           className="prose prose-lg prose-slate max-w-none font-poppins font-light text-[#123042] text-[16px] leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: resource.content }}
+          dangerouslySetInnerHTML={{
+            __html: resource.content
+              // Fix hardcoded localhost/src/assets URLs from database
+              .replace(/http:\/\/localhost:5173\/src\/assets\//g, '/assets/')
+              // Fix relative src/assets URLs if any
+              .replace(/"\/src\/assets\//g, '"/assets/')
+          }}
         />
       </div>
 

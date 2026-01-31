@@ -12,7 +12,7 @@ const AboutHero: React.FC = () => {
           <img
             src={aboutHeroMobile}
             alt="Who We Are"
-            className="absolute left-[-27px] top-0 w-[437px] h-[350px] max-w-none object-cover rounded-[58px]"
+            className="absolute left-[-23px] top-0 w-[437px] h-[350px] max-w-none object-cover rounded-[58px]"
           />
 
           {/* Text Overlay Mobile */}

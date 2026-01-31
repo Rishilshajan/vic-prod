@@ -109,8 +109,6 @@ const CreateResource: React.FC = () => {
         date: new Date().toISOString().split('T')[0],
         excerpt: '',
         content: '',
-        category: 'Sustainable Development',
-        tags: '',
         coverImage: null,
         coverPosition: '50% 50%'
     });
