@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, ArrowRight, Lock, Mail, Loader2, Eye, EyeOff } from 'lucide-react';
 import vicLogo from '../assets/VICLOGO.png';
 import { supabase } from '../lib/supabaseClient';
 
 const AdminLogin: React.FC = () => {
     const [email, setEmail] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
+    const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+
+    // Auth Step: 'email' (enter email) | 'password' (enter password)
+    const [authStep, setAuthStep] = useState<'email' | 'password'>('email');
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedEmail = localStorage.getItem('adminEmail');
-        if (storedEmail) {
-            setEmail(storedEmail);
-            setRememberMe(true);
-        }
-    }, []);
+        // Check for existing session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                navigate('/admin/dashboard');
+            }
+        });
+    }, [navigate]);
 
     const showToastError = (message: string) => {
         setToastMessage(message);
@@ -27,15 +33,8 @@ const AdminLogin: React.FC = () => {
         setTimeout(() => setShowToast(false), 3000);
     };
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // 1. Strict Domain Validation
-        const normalizedEmail = email.toLowerCase().trim();
-
-        // Regex to match strictly @vic.org.in or @*.vic.org.in
-        // Matches: user@vic.org.in, user@admin.vic.org.in
-        // Rejects: user@gmail.com, user@fakevic.org.in
+    const validateEmail = (emailToCheck: string) => {
+        const normalizedEmail = emailToCheck.toLowerCase().trim();
         const vicDomainRegex = /@((\w+\.)*vic\.org\.in)$/;
         const allowedEmail1 = import.meta.env.VITE_ALLOWED_EMAIL1;
         const allowedEmail2 = import.meta.env.VITE_ALLOWED_EMAIL2;
@@ -45,50 +44,136 @@ const AdminLogin: React.FC = () => {
             (allowedEmail1 && normalizedEmail === allowedEmail1.toLowerCase().trim()) ||
             (allowedEmail2 && normalizedEmail === allowedEmail2.toLowerCase().trim());
 
-        if (!isValidDomain && !isAllowedEmail) {
-            showToastError(`Invalid email domain.`);
+        return isValidDomain || isAllowedEmail;
+    };
+
+    const handleEmailSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!validateEmail(email)) {
+            showToastError('Access restricted. Unauthorized email domain.');
+            return;
+        }
+
+        setAuthStep('password');
+    };
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const normalizedEmail = email.toLowerCase().trim();
+
+        try {
+            // 1. Try to Sign In
+            const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                email: normalizedEmail,
+                password: password,
+            });
+
+            if (signInData.user) {
+                navigate('/admin/dashboard');
+                return;
+            }
+
+            if (signInError) {
+                // If error is "Invalid login credentials", it could mean wrong password OR user doesn't exist.
+                // We will try to SignUp as a fallback for new allowed users.
+
+                // Note: supabase.auth.signUp will automatically return an error if user already exists, 
+                // effectively acting as a check.
+                if (signInError.message === 'Invalid login credentials') {
+
+                    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                        email: normalizedEmail,
+                        password: password,
+                    });
+
+                    if (signUpData.user) {
+                        // New user created successfully (and logged in if email confirmation is disabled or auto-confirmed)
+                        // If email confirmation is enabled, session might be null.
+                        if (signUpData.session) {
+                            navigate('/admin/dashboard');
+                        } else {
+                            // This case happens if email confirmation is required.
+                            // For now we assume the requirement implies immediate access or we can handle verification.
+                            showToastError('Account created. Please verify your email if required.');
+                        }
+                        return;
+                    }
+
+                    if (signUpError) {
+                        // If signUp fails, it might be because "User already registered" (which shouldn't happen if signIn failed with invalid credentials unless it's strictly password mismatch).
+                        // Actually, if User exists, SignUp returns a specific known behavior (often just sends confirmation email again or errors).
+                        // But typically if SignIn failed with 'Invalid credentials', it implies:
+                        // A) User exists, wrong password.
+                        // B) User does not exist (and we just failed to sign in).
+
+                        // Refined Logic:
+                        // 'Invalid login credentials' is ambiguous. 
+                        // If we want to be smart:
+                        // If signInError => Try SignUp.
+                        // If SignUp says "User already registered" => Then it was definitely a Wrong Password case.
+
+                        if (signUpError.message.includes('already registered') || signUpError.message.includes('already exists')) {
+                            showToastError('Incorrect password.');
+                        } else {
+                            // Genuine other error or true signup failure
+                            showToastError(signUpError.message);
+                        }
+                    } else {
+                        // SignUp didn't error but didn't give session? (Email confirmation case)
+                        showToastError('Please check your email for verification.');
+                    }
+
+                } else {
+                    // Other sign in error (e.g. rate limit)
+                    showToastError(signInError.message);
+                }
+            }
+
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Authentication failed';
+            showToastError(errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleForgotPassword = async () => {
+        if (!email) {
+            showToastError('Please enter your email strictly first.');
+            setAuthStep('email');
+            return;
+        }
+        if (!validateEmail(email)) {
+            showToastError('Access restricted.');
             return;
         }
 
         setIsLoading(true);
-
         try {
-            // 2. Send Magic Link
-            const { error: otpError } = await supabase.auth.signInWithOtp({
-                email: normalizedEmail,
-                options: {
-                    emailRedirectTo: window.location.origin + '/admin/dashboard',
-                    shouldCreateUser: true,
-                }
+            console.log("Attempting password reset for:", email);
+            console.log("Redirect URL:", window.location.origin + '/admin/update-password');
+
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + '/admin/update-password',
             });
 
-            if (otpError) throw otpError;
-
-            // 3. Handle 'Remember Me'
-            if (rememberMe) {
-                localStorage.setItem('adminEmail', email);
-            } else {
-                localStorage.removeItem('adminEmail');
+            if (error) {
+                console.error("Reset Password Error:", error);
+                // Check for common Redirect URL error (usually 400 or specific message)
+                if (error.status === 400 || error.message?.toLowerCase().includes('redirect_url')) {
+                    throw new Error('Supabase Config Error: Please add "' + window.location.origin + '/admin/update-password" to your Redirect URLs in Supabase Dashboard.');
+                }
+                throw error;
             }
 
-            // 4. Navigate to verification screen
-            navigate('/admin/verify', { state: { email: normalizedEmail } });
-
+            showToastError('Password reset link sent! Check your email.');
         } catch (error: unknown) {
-            console.error('Login error:', error);
-            let errorMessage = 'Authentication failed';
-            let errorStatus: number | undefined;
-
-            if (typeof error === 'object' && error !== null) {
-                if ('message' in error) errorMessage = String((error as { message: unknown }).message);
-                if ('status' in error) errorStatus = Number((error as { status: unknown }).status);
-            }
-
-            if (errorStatus === 429 || errorMessage?.includes('429')) {
-                showToastError('Too many attempts. Please wait 60s.');
-            } else {
-                showToastError(errorMessage);
-            }
+            console.error("Forgot Password catch:", error);
+            const errorMessage = error instanceof Error ? error.message : 'Failed to send reset email.';
+            showToastError(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -96,73 +181,124 @@ const AdminLogin: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#F6F6F6] font-sans transition-colors duration-200">
-            {/* Logo with Glass Effect */}
+            {/* Logo */}
             <div className="mb-8 p-4 bg-white/70 backdrop-blur-md border border-black/5 shadow-sm rounded-[24px]">
                 <img src={vicLogo} alt="VIC Logo" className="h-16 w-auto object-contain" />
             </div>
 
             <motion.div
+                layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="w-full max-w-md px-6"
             >
-                {/* Login Card */}
                 <div className="bg-white rounded-[30px] shadow-xl overflow-hidden border border-[#23A6F0]/30 p-8 sm:p-10">
                     <div className="flex flex-col items-center">
                         <div className="text-center mb-8">
                             <h1 className="text-2xl font-bold text-[#123042]">Admin CMS Login</h1>
-                            <p className="text-[#23A6F0]/80 mt-2">Enter your organization email to continue</p>
+                            <p className="text-[#23A6F0]/80 mt-2">
+                                {authStep === 'email' ? 'Enter your organization email' : 'Enter your password'}
+                            </p>
                         </div>
-                        <form action="#" className="space-y-6 w-full" method="POST" onSubmit={handleLogin}>
-                            <div>
-                                <label className="block text-sm font-semibold text-[#123042] mb-2 px-1" htmlFor="email">Email Address</label>
-                                <div className="relative">
-                                    <input
-                                        className="block w-full h-12 md:h-14 px-6 bg-white border border-[#23A6F0] rounded-xl focus:outline-none focus:ring-1 focus:ring-[#23A6F0] text-[#123042] placeholder-[#23A6F0] placeholder:italic placeholder:font-light transition-all shadow-sm pl-6"
-                                        id="email"
-                                        name="email"
-                                        required
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        disabled={isLoading}
-                                    />
-                                </div>
-                            </div>
 
-                            <div className="flex items-center px-1">
-                                <input
-                                    className="w-4 h-4 text-[#0077B6] border-[#23A6F0] rounded focus:ring-[#23A6F0]"
-                                    id="remember"
-                                    type="checkbox"
-                                    checked={rememberMe}
-                                    onChange={(e) => setRememberMe(e.target.checked)}
-                                />
-                                <label className="ml-2 text-sm text-[#123042]/70" htmlFor="remember">Remember this device</label>
-                            </div>
-                            <div className="pt-2">
-                                <button className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-[#0077B6] hover:bg-[#026aa1] transition-all active:scale-[0.98] shadow-lg shadow-[#0077B6]/20 disabled:opacity-70 disabled:cursor-not-allowed" type="submit" disabled={isLoading}>
-                                    {isLoading ? 'Sending Link...' : 'Send Login Link'}
+                        {authStep === 'email' ? (
+                            <form onSubmit={handleEmailSubmit} className="space-y-6 w-full">
+                                <div>
+                                    <label className="block text-sm font-semibold text-[#123042] mb-2 px-1" htmlFor="email">Email Address</label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#23A6F0]/60 w-5 h-5" />
+                                        <input
+                                            className="block w-full h-12 md:h-14 px-12 bg-white border border-[#23A6F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#23A6F0]/20 text-[#123042] placeholder-[#23A6F0]/40 transition-all shadow-sm"
+                                            id="email"
+                                            name="email"
+                                            required
+                                            type="email"
+                                            placeholder="name@vic.org.in"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            autoFocus
+                                        />
+                                    </div>
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-[#0077B6] hover:bg-[#026aa1] transition-all active:scale-[0.98] shadow-lg shadow-[#0077B6]/20"
+                                >
+                                    Continue <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </button>
-                            </div>
-                        </form>
+                            </form>
+                        ) : (
+                            <form onSubmit={handleLogin} className="space-y-6 w-full">
+                                <div className="text-sm font-medium text-slate-500 mb-2 flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <span className="truncate max-w-[200px]">{email}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => setAuthStep('email')}
+                                        className="text-[#0077B6] hover:underline text-xs"
+                                    >
+                                        Change
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <div className="flex justify-between items-center mb-2 px-1">
+                                        <label className="block text-sm font-semibold text-[#123042]" htmlFor="password">Password</label>
+                                    </div>
+                                    <div className="relative">
+                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#23A6F0]/60 w-5 h-5" />
+                                        <input
+                                            className="block w-full h-12 md:h-14 px-12 pr-12 bg-white border border-[#23A6F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#23A6F0]/20 text-[#123042] placeholder-[#23A6F0]/40 transition-all shadow-sm"
+                                            id="password"
+                                            name="password"
+                                            required
+                                            type={showPassword ? "text" : "password"}
+                                            placeholder="••••••••"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            autoFocus
+                                            disabled={isLoading}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#23A6F0]/60 hover:text-[#0077B6]"
+                                        >
+                                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        </button>
+                                    </div>
+                                    <div className="flex justify-end mt-2">
+                                        <button
+                                            type="button"
+                                            onClick={handleForgotPassword}
+                                            className="text-xs text-[#0077B6] hover:underline font-medium"
+                                        >
+                                            Forgot Password?
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-[#0077B6] hover:bg-[#026aa1] transition-all active:scale-[0.98] shadow-lg shadow-[#0077B6]/20 disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Sign In'}
+                                </button>
+                            </form>
+                        )}
+
                         <div className="mt-8 pt-6 border-t border-slate-100 text-center w-full">
                             <p className="text-xs text-slate-400">
-                                © 2026 VIC Think Tank for Sustainable Development.<br />
+                                © 2026 VIC Think Tank<br />
                                 Authorized Access Only.
                             </p>
                         </div>
                     </div>
                 </div>
-                <div className="mt-8 text-center">
-                    <p className="text-sm text-slate-500">
-                        Facing issues? <a className="text-[#0077B6] font-medium hover:underline" href="mailto:admin@vic-thinktank.org">Contact System Administrator</a>
-                    </p>
-                </div>
             </motion.div>
 
-            {/* Error Toast Notification */}
+            {/* Error Toast */}
             <AnimatePresence>
                 {showToast && (
                     <motion.div
@@ -178,6 +314,7 @@ const AdminLogin: React.FC = () => {
             </AnimatePresence>
         </div>
     );
+
 };
 
 export default AdminLogin;

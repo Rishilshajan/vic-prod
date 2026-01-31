@@ -15,6 +15,7 @@ import AdminDashboard from '../pages/AdminDashboard';
 import CreateResource from '../pages/CreateResource';
 import PageTransition from './PageTransition';
 import ResourceDetail from '../pages/ResourceDetail';
+import UpdatePassword from '../pages/UpdatePassword';
 
 import ProtectedRoute from './admin/ProtectedRoute';
 
@@ -35,6 +36,7 @@ const AnimatedRoutes: React.FC = () => {
                 <Route path="/resources/:id" element={<PageTransition><ResourceDetail /></PageTransition>} />
                 <Route path="/admin" element={<AdminLogin />} />
                 <Route path="/admin/verify" element={<PageTransition><EmailVerification /></PageTransition>} />
+                <Route path="/admin/update-password" element={<PageTransition><UpdatePassword /></PageTransition>} />
                 <Route
                     path="/admin/dashboard"
                     element={
