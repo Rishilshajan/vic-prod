@@ -8,11 +8,11 @@ const OurWorkHero: React.FC = () => {
 
             {/* Mobile Layout */}
             <div className="md:hidden w-full relative bg-white flex flex-col items-center overflow-hidden">
-                <div className="relative mt-[25px] group w-full h-[350px] flex justify-center">
+                <div className="relative mt-8 w-full h-[350px] flex justify-center">
                     <img
                         src={ourWorkHeroMobile}
                         alt="Our Work"
-                        className="absolute left-[-23px] top-0 w-[437px] h-[350px] max-w-none object-cover rounded-[58px]"
+                        className="w-full h-full object-cover"
                     />
 
                     {/* Text Overlay Mobile */}

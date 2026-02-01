@@ -52,6 +52,7 @@ const AdminDashboard: React.FC = () => {
 
             {/* Main Content */}
             <main className="flex-1 flex flex-col h-full overflow-hidden lg:ml-64">
+
                 {/* Top Header (Mobile Toggle) */}
                 <header className="bg-white border-b border-slate-200 lg:hidden p-4 flex items-center justify-between">
                     <div className="flex items-center space-x-3">

@@ -15,6 +15,7 @@ const Contact: React.FC = () => {
             </div>
 
             <section className="container mx-auto px-4 py-12 md:py-20 mb-4">
+
                 {/* Mobile Layout: Contact Info → Map → Form */}
                 <div className="md:hidden flex flex-col items-center gap-8">
                     <ContactInfo />

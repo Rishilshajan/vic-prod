@@ -49,7 +49,7 @@ const EmailVerification: React.FC = () => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#F6F6F6] font-sans transition-colors duration-200">
 
-            {/* Logo with Glass Effect (Matches AdminLogin) */}
+            {/* Logo with Glass Effect */}
             <div className="mb-8 p-4 bg-white/70 backdrop-blur-md border border-black/5 shadow-sm rounded-[24px]">
                 <img src={vicLogo} alt="VIC Logo" className="h-16 w-auto object-contain" />
             </div>
@@ -61,7 +61,7 @@ const EmailVerification: React.FC = () => {
                 className="w-full max-w-md px-6"
             >
 
-                {/* Card Container (Matches AdminLogin) */}
+                {/* Card Container */}
                 <div className="bg-white rounded-[30px] shadow-xl overflow-hidden border border-[#23A6F0]/30 p-8 sm:p-10">
                     <div className="flex flex-col items-center">
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50/50 mb-6 text-[#123042]">

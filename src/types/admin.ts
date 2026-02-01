@@ -5,5 +5,5 @@ export interface ResourceData {
     excerpt: string;
     content: string;
     coverImage: string | null;
-    coverPosition: string; // for object-position (e.g. "50% 50%")
+    coverPosition: string;
 }

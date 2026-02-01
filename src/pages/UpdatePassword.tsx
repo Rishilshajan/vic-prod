@@ -24,7 +24,6 @@ const UpdatePassword: React.FC = () => {
                 setToastMessage('Invalid or expired link. Please try "Forgot Password" again.');
                 setToastType('error');
                 setShowToast(true);
-                // navigate('/admin'); // Optional: redirect immediately or let them see the error
             }
         });
     }, []);
@@ -72,6 +71,7 @@ const UpdatePassword: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#F6F6F6] font-sans transition-colors duration-200">
+
             {/* Logo */}
             <div className="mb-8 p-4 bg-white/70 backdrop-blur-md border border-black/5 shadow-sm rounded-[24px]">
                 <img src={vicLogo} alt="VIC Logo" className="h-16 w-auto object-contain" />

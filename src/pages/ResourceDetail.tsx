@@ -120,9 +120,7 @@ const ResourceDetail: React.FC = () => {
           className="prose prose-lg prose-slate max-w-none font-poppins font-light text-[#123042] text-[16px] leading-relaxed"
           dangerouslySetInnerHTML={{
             __html: resource.content
-              // Fix hardcoded localhost/src/assets URLs from database
               .replace(/http:\/\/localhost:5173\/src\/assets\//g, '/assets/')
-              // Fix relative src/assets URLs if any
               .replace(/"\/src\/assets\//g, '"/assets/')
           }}
         />

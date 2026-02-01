@@ -105,7 +105,7 @@ const CareersForm: React.FC = () => {
             }
 
             const payload = {
-                type: 'career', // Important flag for the script
+                type: 'career',
                 ...formData,
                 resume: resumeData
             };

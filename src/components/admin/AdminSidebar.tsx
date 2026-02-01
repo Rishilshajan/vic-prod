@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-    LayoutDashboard,
-    FileText,
-    LogOut,
-    X
-} from 'lucide-react';
+import { LayoutDashboard, FileText, LogOut, X } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import vicLogo from '../../assets/VICLOGO.png';

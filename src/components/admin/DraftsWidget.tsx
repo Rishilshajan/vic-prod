@@ -15,7 +15,7 @@ interface DraftCardProps {
 const DraftCard: React.FC<DraftCardProps> = ({ id, title, date, author }) => {
     const navigate = useNavigate();
 
-    // Calculate relative time (e.g., "2 hours ago") - simplified for now
+    // Calculate relative time 
     const displayDate = new Date(date).toLocaleDateString();
 
     return (

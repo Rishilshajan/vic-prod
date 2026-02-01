@@ -19,6 +19,7 @@ const AdminLogin: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+
         // Check for existing session
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
@@ -77,11 +78,6 @@ const AdminLogin: React.FC = () => {
             }
 
             if (signInError) {
-                // If error is "Invalid login credentials", it could mean wrong password OR user doesn't exist.
-                // We will try to SignUp as a fallback for new allowed users.
-
-                // Note: supabase.auth.signUp will automatically return an error if user already exists, 
-                // effectively acting as a check.
                 if (signInError.message === 'Invalid login credentials') {
 
                     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
@@ -90,38 +86,25 @@ const AdminLogin: React.FC = () => {
                     });
 
                     if (signUpData.user) {
-                        // New user created successfully (and logged in if email confirmation is disabled or auto-confirmed)
-                        // If email confirmation is enabled, session might be null.
                         if (signUpData.session) {
                             navigate('/admin/dashboard');
                         } else {
-                            // This case happens if email confirmation is required.
-                            // For now we assume the requirement implies immediate access or we can handle verification.
                             showToastError('Account created. Please verify your email if required.');
                         }
                         return;
                     }
 
                     if (signUpError) {
-                        // If signUp fails, it might be because "User already registered" (which shouldn't happen if signIn failed with invalid credentials unless it's strictly password mismatch).
-                        // Actually, if User exists, SignUp returns a specific known behavior (often just sends confirmation email again or errors).
-                        // But typically if SignIn failed with 'Invalid credentials', it implies:
-                        // A) User exists, wrong password.
-                        // B) User does not exist (and we just failed to sign in).
-
-                        // Refined Logic:
-                        // 'Invalid login credentials' is ambiguous. 
-                        // If we want to be smart:
-                        // If signInError => Try SignUp.
-                        // If SignUp says "User already registered" => Then it was definitely a Wrong Password case.
 
                         if (signUpError.message.includes('already registered') || signUpError.message.includes('already exists')) {
                             showToastError('Incorrect password.');
                         } else {
+
                             // Genuine other error or true signup failure
                             showToastError(signUpError.message);
                         }
                     } else {
+
                         // SignUp didn't error but didn't give session? (Email confirmation case)
                         showToastError('Please check your email for verification.');
                     }
@@ -162,6 +145,7 @@ const AdminLogin: React.FC = () => {
 
             if (error) {
                 console.error("Reset Password Error:", error);
+
                 // Check for common Redirect URL error (usually 400 or specific message)
                 if (error.status === 400 || error.message?.toLowerCase().includes('redirect_url')) {
                     throw new Error('Supabase Config Error: Please add "' + window.location.origin + '/admin/update-password" to your Redirect URLs in Supabase Dashboard.');
@@ -290,7 +274,7 @@ const AdminLogin: React.FC = () => {
 
                         <div className="mt-8 pt-6 border-t border-slate-100 text-center w-full">
                             <p className="text-xs text-slate-400">
-                                © 2026 VIC Think Tank<br />
+                                © 2026 VIC Think Tank for Sustainable Development<br />
                                 Authorized Access Only.
                             </p>
                         </div>

@@ -12,6 +12,7 @@ const AboutTeam: React.FC = () => {
 
                 {/* All Team Members in Single Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-[45px] justify-items-center w-full md:w-fit mx-auto">
+
                     {/* Empty space on left */}
                     <div className="hidden md:block"></div>
 

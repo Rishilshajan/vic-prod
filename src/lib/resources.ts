@@ -60,6 +60,7 @@ export const saveResource = async (data: ResourceData, status: 'draft' | 'publis
     const payload = mapToDB(data, status);
 
     if (id) {
+
         // Update existing
         const { data: result, error } = await supabase
             .from('resources')
@@ -71,6 +72,7 @@ export const saveResource = async (data: ResourceData, status: 'draft' | 'publis
         if (error) throw error;
         return mapFromDB(result);
     } else {
+
         // Insert new
         const { data: result, error } = await supabase
             .from('resources')
@@ -84,6 +86,7 @@ export const saveResource = async (data: ResourceData, status: 'draft' | 'publis
 };
 
 export const getResource = async (id: string) => {
+
     // Check cache first
     if (resourceCache.has(id)) {
         return resourceCache.get(id)!;
@@ -110,7 +113,6 @@ export const getDraftsList = async () => {
         .order('updated_at', { ascending: false });
 
     if (error) throw error;
-    // No mapping needed for list view as we don't access mapped fields
     return data;
 };
 
@@ -127,13 +129,7 @@ export const getPublishedList = async () => {
 
 // Full fetch for editing (backward compatibility)
 export const getDrafts = async () => {
-    return getDraftsList(); // redirect to list for now, or keep full if needed elsewhere. 
-    // Actually, let's keep getDrafts as full fetch if used, but we will replace usages.
-    // To be safe, let's make getDrafts/getPublishedResources alias to the List versions for the dashboard, 
-    // unless specifically asked for full data (which is only done by getResource(id)).
-
-    // Changing behavior: getDrafts and getPublishedResources now return LIGHTWEIGHT data.
-    // This assumes no consumer needs the full content for a list.
+    return getDraftsList();
     const { data, error } = await supabase
         .from('resources')
         .select('id, title, author, date, status, updated_at, excerpt')
@@ -147,7 +143,7 @@ export const getDrafts = async () => {
 export const getPublishedResources = async () => {
     const { data, error } = await supabase
         .from('resources')
-        .select('id, title, author, date, status, updated_at, excerpt, cover_image') // EXPLICITLY NO 'content'
+        .select('id, title, author, date, status, updated_at, excerpt, cover_image')
         .eq('status', 'published')
         .order('created_at', { ascending: true })
         .limit(20); // Reduced limit further to speed up rendering if images are heavy
@@ -187,8 +183,6 @@ export const deleteResource = async (id: string) => {
 
 // Helper to get stats for dashboard
 export const getStats = async () => {
-    // We can do this with two count queries or one select.
-    // Given the dashboard needs counts, separate count queries are cleaner.
 
     // Get Published Count
     const { count: publishedCount, error: pubError } = await supabase

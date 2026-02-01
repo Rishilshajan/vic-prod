@@ -33,17 +33,14 @@ const ContactForm: React.FC = () => {
         }
 
         try {
-            // We use 'no-cors' mode or text/plain to avoid preflight OPTIONS request which Apps Script doesn't handle
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 body: JSON.stringify(formData),
-                // Using text/plain prevents the browser from sending a preflight OPTIONS request
                 headers: {
                     "Content-Type": "text/plain;charset=utf-8",
                 },
             });
 
-            // Since we might be using no-cors or opaque responses, we assume success if no network error occurred.
             alert("Thank you! Your message has been sent successfully.");
             setFormData({
                 name: '',
