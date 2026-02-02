@@ -18,9 +18,6 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, onChange }) => {
     // Sync content changes from parent
     useEffect(() => {
         if (editorRef.current && content !== editorRef.current.innerHTML) {
-            // Only update if the editor is empty (initial load) or the content is significantly different
-            // preventing cursor jumps during active typing is hard, but for loading a draft, this is essential.
-            // We check if the editor is "effectively empty" or if we are just loading data.
             const isEditorEmpty = editorRef.current.innerHTML === '' || editorRef.current.innerHTML === '<p><br></p>';
             if (isEditorEmpty || !editorRef.current.contains(document.activeElement)) {
                 editorRef.current.innerHTML = content;
