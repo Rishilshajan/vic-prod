@@ -13,7 +13,7 @@ const VisionMissionValues: React.FC = () => {
             Vision
           </h2>
           {/* Content */}
-          <p className="font-light text-[16px] md:text-[20px] leading-relaxed text-center text-[#1D6D29] w-full max-w-[580px]">
+          <p className="font-light text-[18px] md:text-[20px] leading-relaxed text-center text-[#1D6D29] w-full max-w-[580px]">
             Empowered development ecosystem with evidence-based decisions that drive deeper impact
           </p>
         </div>
@@ -25,7 +25,7 @@ const VisionMissionValues: React.FC = () => {
             Mission
           </h2>
           {/* Content */}
-          <p className="font-light text-[14px] md:text-[20px] leading-relaxed text-center text-[#1D6D29] w-full max-w-[800px]">
+          <p className="font-light text-[18px] md:text-[20px] leading-relaxed text-center text-[#1D6D29] w-full max-w-[800px]">
             We partner with changemakers to deliver rigorous impact measurement and evaluations for creating lasting impact
           </p>
         </div>
@@ -40,19 +40,19 @@ const VisionMissionValues: React.FC = () => {
           <div className="flex flex-col gap-8">
 
             {/* Value 1 */}
-            <p className="max-w-[580px] text-center md:text-justify font-light text-[16px] md:text-[20px] leading-relaxed text-[#1D6D29] mx-auto">
+            <p className="max-w-[580px] text-center md:text-justify font-light text-[18px] md:text-[20px] leading-relaxed text-[#1D6D29] mx-auto">
               <span className="font-semibold">Rigour with Purpose: </span>
               We commit to depth, precision, and thoughtful inquiry in everything we do. To generate data and surface insights that empower meaningful decisions.
             </p>
 
             {/* Value 2 */}
-            <p className="max-w-[580px] text-center md:text-justify font-light text-[16px] md:text-[20px] leading-relaxed text-[#1D6D29] mx-auto">
+            <p className="max-w-[580px] text-center md:text-justify font-light text-[18px] md:text-[20px] leading-relaxed text-[#1D6D29] mx-auto">
               <span className="font-semibold">Collaborative Curiosity: </span>
               We bring an open mind, deep listening, and co-creative spirit to each engagement. We learn with our partners and adapt to each unique context.
             </p>
 
             {/* Value 3 */}
-            <p className="max-w-[580px] text-center md:text-justify font-light text-[16px] md:text-[20px] leading-relaxed text-[#1D6D29] mx-auto">
+            <p className="max-w-[580px] text-center md:text-justify font-light text-[18px] md:text-[20px] leading-relaxed text-[#1D6D29] mx-auto">
               <span className="font-semibold">Integrity and Accountability: </span>
               We uphold the highest ethical standards, respect privacy, and ensure our work remains honest, transparent, and accountable to the communities it serves.
             </p>

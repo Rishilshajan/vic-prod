@@ -11,7 +11,7 @@ const TechnologyIntegration: React.FC = () => {
                     <h2 className="text-[#123042] font-bold text-3xl md:text-5xl mb-12">
                         Technology Integration
                     </h2>
-                    <p className="text-[#6BC778] text-sm md:text-base text-center leading-relaxed max-w-[800px] mx-auto">
+                    <p className="text-[#188628] text-sm md:text-base text-center leading-relaxed max-w-[800px] mx-auto">
                         Empowered By cutting-edge technology, VIC delivers actionable insights, enabling organisations to enhance programme efficiency, foster accountability, and maximise their social impact.
                     </p>
                 </div>
@@ -99,28 +99,28 @@ const TechnologyIntegration: React.FC = () => {
                     <div
                         className="flex-1 min-w-[487px] max-w-[487px] p-12 border-[3px] border-[#228B22] z-20 font-poppins rounded-[20px] bg-white h-[598px]"
                     >
-                        <h3 className="text-[#228B22] font-medium text-[28px] mb-10">
+                        <h3 className="text-[#188628] font-medium text-[28px] mb-10">
                             Benefits
                         </h3>
 
                         <div className="space-y-8">
                             <div>
-                                <h4 className="text-[#228B22] font-medium text-[20px] mb-3">Accurate Data</h4>
-                                <p className="text-[#228B22] text-[14px] leading-relaxed font-light text-justify">
+                                <h4 className="text-[#188628] font-medium text-[20px] mb-3">Accurate Data</h4>
+                                <p className="text-[#188628] text-[14px] leading-relaxed font-light text-justify">
                                     Minimise errors with automated validations and centralised repositories.
                                 </p>
                             </div>
 
                             <div>
-                                <h4 className="text-[#228B22] font-medium text-[20px] mb-3">Faster Decisions</h4>
-                                <p className="text-[#228B22] text-[14px] leading-relaxed font-light text-justify">
+                                <h4 className="text-[#188628] font-medium text-[20px] mb-3">Faster Decisions</h4>
+                                <p className="text-[#188628] text-[14px] leading-relaxed font-light text-justify">
                                     Access real-time insights to drive targeted interventions.
                                 </p>
                             </div>
 
                             <div>
-                                <h4 className="text-[#228B22] font-medium text-[20px] mb-3">Transparent Reporting</h4>
-                                <p className="text-[#228B22] text-[14px] leading-relaxed font-light text-justify">
+                                <h4 className="text-[#188628] font-medium text-[20px] mb-3">Transparent Reporting</h4>
+                                <p className="text-[#188628] text-[14px] leading-relaxed font-light text-justify">
                                     Showcase impact with visually engaging, stakeholder-friendly dashboards.
                                 </p>
                             </div>

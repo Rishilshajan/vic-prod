@@ -16,8 +16,8 @@ const Header: React.FC = () => {
     { label: 'Home', path: '/' },
     { label: 'About Us', path: '/about-us' },
     { label: 'Our Work', path: '/our-work' },
-    { label: 'Careers', path: '/careers' },
     { label: 'Resources', path: '/resources' },
+    { label: 'Careers', path: '/careers' },
   ];
 
   const isActiveLink = (path: string) => {
@@ -146,7 +146,7 @@ const Header: React.FC = () => {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", stiffness: 80, damping: 20, mass: 1 }}
-              className="bg-white w-full h-[95%] md:h-[85%] rounded-[32px] p-8 flex flex-col relative"
+              className="bg-white w-full h-[95%] md:h-[85%] rounded-[32px] p-6 md:p-8 flex flex-col items-center relative"
               onClick={(e) => e.stopPropagation()}
             >
 

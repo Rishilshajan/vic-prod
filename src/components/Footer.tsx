@@ -16,16 +16,18 @@ const Footer: React.FC = () => {
       >
 
         {/* Logo Section  */}
-        <div
-          className="bg-white flex items-center justify-center shrink-0 mb-6 xl:mb-0 p-4 order-3 xl:order-1 self-center xl:self-auto"
-          style={{
-            width: '312px',
-            height: '152px',
-            borderRadius: '32px'
-          }}
-        >
-          <img src={vicLogo} alt="VIC Logo" className="w-[75%] h-auto object-contain" />
-        </div>
+        <Link to="/" onClick={() => window.scrollTo(0, 0)}>
+          <div
+            className="bg-white flex items-center justify-center shrink-0 mb-6 xl:mb-0 p-4 order-3 xl:order-1 self-center xl:self-auto"
+            style={{
+              width: '312px',
+              height: '152px',
+              borderRadius: '32px'
+            }}
+          >
+            <img src={vicLogo} alt="VIC Logo" className="w-[75%] h-auto object-contain" />
+          </div>
+        </Link>
 
 
         {/* CENTER COLUMN */}
@@ -63,7 +65,7 @@ const Footer: React.FC = () => {
 
                 {/* Mobile LinkedIn Icon */}
                 <a
-                  href="https://www.linkedin.com/company/vic-impact"
+                  href="https://www.linkedin.com/company/v-impact-consulting/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="md:hidden text-white hover:opacity-80 transition-opacity"
@@ -107,7 +109,7 @@ const Footer: React.FC = () => {
 
             {/* Desktop LinkedIn Icon*/}
             <a
-              href="https://www.linkedin.com/company/vic-impact"
+              href="https://www.linkedin.com/company/v-impact-consulting/"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:block text-white hover:opacity-80 transition-opacity"
